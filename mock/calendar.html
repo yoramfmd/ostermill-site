@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project calendar · The Case File · Ostermill</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Archivo+Black&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:#14171A; --accent:#E8AE00; --green:#1E4D3B; --red:#B3261E;
+    --erp-chrome:#D8D6D0; --erp-line:#B8B6B0; --erp-blue:#3A5A78; --gray:#F4F5F6;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#E9E8E4; font-family:Tahoma,'Segoe UI',Arial,sans-serif; color:#26292D; padding-bottom:96px; }
+
+  /* ===== reader chrome: the phase band ===== */
+  .phasebar { position:sticky; top:0; z-index:15; background:var(--ink); color:#D6DADD; font-family:'IBM Plex Mono',monospace; font-size:11px; display:flex; align-items:center; gap:0; padding:0 14px; height:40px; }
+  .phasebar .lbl { background:var(--accent); color:var(--ink); font-weight:600; padding:3px 8px; margin-right:14px; }
+  .phasebar a.ph { color:#D6DADD; text-decoration:none; padding:0 12px; height:40px; display:flex; align-items:center; border-left:1px solid #2E343A; }
+  .phasebar a.ph:hover { background:#000; color:#fff; box-shadow:inset 0 -3px 0 var(--accent); }
+  .phasebar .fill { flex:1; }
+  .phasebar .brkt { color:#9AA1A8; }
+
+  /* ===== diegetic ERP window ===== */
+  .erp { max-width:1080px; margin:22px auto 0; border:1px solid #9A9892; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.12); }
+  .erp-title { background:linear-gradient(#4A6B8A,var(--erp-blue)); color:#fff; font-size:12px; padding:6px 10px; display:flex; gap:8px; align-items:center; }
+  .erp-title .dot { width:10px; height:10px; border-radius:50%; background:#C8D4DE; margin-left:auto; }
+  .erp-tool { background:var(--erp-chrome); border-bottom:1px solid var(--erp-line); font-size:11px; padding:5px 10px; display:flex; gap:14px; color:#3A3D40; }
+  .erp-tool span { padding:2px 6px; border:1px solid transparent; }
+  .erp-tool span.on { background:#fff; border:1px solid var(--erp-line); }
+  .erp-user { margin-left:auto; color:#6A6D70; }
+
+  .cal { padding:14px 14px 22px; }
+  .mrow { display:flex; align-items:baseline; gap:10px; margin:20px 2px 8px; }
+  .mrow h2 { font-size:15px; font-weight:bold; color:#26292D; }
+  .mrow .yr { font-size:11px; color:#8A8D90; }
+  .mrow .chrome-tag { font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:1px; background:var(--ink); color:#fff; padding:2px 7px; }
+  .mrow .chrome-tag b { color:var(--accent); font-weight:600; }
+
+  table.month { width:100%; border-collapse:collapse; table-layout:fixed; }
+  table.month th { font-size:10px; color:#6A6D70; font-weight:normal; text-transform:uppercase; border:1px solid var(--erp-line); background:var(--erp-chrome); padding:3px; }
+  table.month td { border:1px solid var(--erp-line); vertical-align:top; height:74px; padding:2px 3px; font-size:10px; color:#8A8D90; background:#fff; }
+  table.month td.out { background:#F3F2EF; }
+  table.month td.wknd { background:#FAF9F7; }
+  td .dn { font-size:10px; margin-bottom:2px; }
+
+  /* phase wash on cells: chrome-side tint */
+  td.ph-decide { box-shadow:inset 3px 0 0 var(--accent); }
+  td.ph-design { box-shadow:inset 3px 0 0 var(--green); }
+  td.ph-observe { box-shadow:inset 3px 0 0 #8A8D90; }
+
+  .ev { display:block; width:100%; text-align:left; border:1px solid #A8B4BE; background:#EAF0F5; color:#26404F; font-size:10px; line-height:1.25; padding:2px 4px; margin-bottom:2px; cursor:pointer; font-family:inherit; border-radius:2px; }
+  .ev:hover { background:#D9E5EE; }
+  .ev b { display:block; font-weight:bold; }
+  .ev .t { color:#5A7284; }
+  .ev.big { border-color:var(--erp-blue); background:#DDE8F1; }
+  .ev.shadow { background:#F2F1EE; border:1px dashed #B8B6B0; color:#7A7D80; cursor:pointer; }
+  .ev.recur { background:#F4F3F0; border-color:#C8C6C0; color:#7A7D80; }
+  .ev .clip { float:right; font-family:'IBM Plex Mono',monospace; font-size:9px; background:var(--ink); color:var(--accent); padding:0 4px; margin-left:3px; }
+  .ghost { display:block; border:1px dashed var(--red); background:#fff; color:var(--red); font-size:9.5px; font-family:'IBM Plex Mono',monospace; padding:2px 4px; margin-bottom:2px; line-height:1.3; }
+
+  /* strips (chrome register: project clock / operating year) */
+  .strip { border:2px solid var(--ink); background:#fff; margin:10px 2px 0; padding:10px 12px; }
+  .strip h3 { font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:1.5px; color:var(--ink); margin-bottom:8px; }
+  .strip h3 b { background:var(--accent); padding:1px 6px; font-weight:600; }
+  .chips { display:flex; gap:8px; flex-wrap:wrap; }
+  .chip { border:1px solid var(--erp-line); background:#fff; font-size:10.5px; padding:5px 8px; cursor:pointer; font-family:inherit; text-align:left; }
+  .chip:hover { border-color:var(--ink); }
+  .chip b { display:block; font-size:10px; color:#5A5D60; font-weight:normal; }
+  .chip .clip { font-family:'IBM Plex Mono',monospace; font-size:9px; background:var(--ink); color:var(--accent); padding:0 4px; margin-left:4px; }
+  .strip .note { font-family:'IBM Plex Mono',monospace; font-size:10px; color:#8A8D90; margin-top:8px; }
+
+  /* ===== modal ===== */
+  .ovl { display:none; position:fixed; inset:0; background:rgba(20,23,26,0.55); z-index:30; align-items:flex-start; justify-content:center; padding:6vh 16px; }
+  .ovl.open { display:flex; }
+  .modal { background:#fff; border:3px solid var(--ink); max-width:640px; width:100%; max-height:84vh; overflow-y:auto; }
+  .modal .formbar { background:var(--ink); color:#fff; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:1.5px; display:flex; padding:7px 14px; align-items:center; }
+  .modal .formbar .x { margin-left:auto; cursor:pointer; background:none; border:none; color:#fff; font-size:14px; font-family:inherit; }
+  .modal .head { padding:14px 18px 10px; border-bottom:3px solid var(--ink); }
+  .modal .head h2 { font-family:'Archivo Black',sans-serif; text-transform:uppercase; font-size:16px; color:var(--ink); }
+  .modal .meta { font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:#5F6870; margin-top:6px; line-height:1.7; }
+  .modal .who { margin-top:6px; }
+  .modal .who span, .modal .who a { display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:10px; border:1px solid var(--ink); padding:1px 6px; margin:2px 3px 0 0; color:var(--ink); text-decoration:none; }
+  .modal .who a { border-bottom:2px solid var(--accent); }
+  .modal .who a:hover { background:var(--field); }
+  .modal section { padding:11px 18px; border-bottom:1px solid #DDDFE2; }
+  .modal section:last-of-type { border-bottom:none; }
+  .modal h3 { font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:2px; color:var(--ink); margin-bottom:6px; }
+  .modal p, .modal li { font-size:12.5px; line-height:1.55; font-family:Arial,'Archivo',sans-serif; }
+  .modal ol { padding-left:18px; }
+  .modal li { margin-bottom:4px; }
+  .modal .none { color:#8A8D90; }
+  .modal .tlink { display:inline-block; margin-top:2px; font-family:'IBM Plex Mono',monospace; font-size:10.5px; background:var(--accent); color:var(--ink); padding:3px 8px; font-weight:600; }
+  .att { display:flex; align-items:stretch; border:1px solid var(--ink); margin-bottom:6px; text-decoration:none; color:inherit; }
+  .att .tag { background:var(--ink); color:#fff; font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:1px; padding:6px 8px; display:flex; align-items:center; white-space:nowrap; }
+  .att .tag.ex { background:var(--ink); color:var(--accent); }
+  .att .txt { padding:5px 10px; font-size:12px; line-height:1.4; font-family:Arial,'Archivo',sans-serif; }
+  a.att:hover { background:#F4F5F6; }
+  a.att .txt::after { content:" →"; font-family:'IBM Plex Mono',monospace; font-size:10px; }
+
+  /* bottom chrome */
+  .chrome { position:fixed; bottom:0; left:0; right:0; background:var(--ink); color:#D6DADD; font-family:'IBM Plex Mono',monospace; font-size:11.5px; display:flex; align-items:center; gap:14px; padding:9px 16px; z-index:20; }
+  .chrome .tagno { background:var(--accent); color:var(--ink); font-weight:600; padding:3px 8px; }
+  .chrome .sep { color:#4A525A; }
+  .chrome a { color:#fff; }
+  .chrome .fill { flex:1; }
+  .chrome { flex-wrap:wrap; }
+  .chrome nav { display:flex; gap:11px; flex-wrap:wrap; }
+  .chrome nav a { text-decoration:none; }
+  .chrome nav a:hover { color:var(--accent); }
+  .chrome nav .cur { color:var(--accent); font-weight:600; }
+
+</style>
+</head>
+<body>
+
+<div class="phasebar">
+  <span class="lbl">THE PROJECT, AS A CALENDAR</span>
+  <a class="ph" href="#m-feb">DECIDE <span class="brkt">&nbsp;Feb – 2 Apr</span></a>
+  <a class="ph" href="#m-apr">DESIGN <span class="brkt">&nbsp;Apr – May</span></a>
+  <a class="ph" href="#s-prove">PROVE <span class="brkt">&nbsp;wks 8–11</span></a>
+  <a class="ph" href="#m-aug">OBSERVE <span class="brkt">&nbsp;launch – quarter</span></a>
+  <a class="ph" href="#s-operate">OPERATE <span class="brkt">&nbsp;the year</span></a>
+  <span class="fill"></span>
+  <span class="brkt">idea → production: 16 weeks · governance: ongoing</span>
+  <a class="ph" href="project-plan.html" style="border-left:1px solid #2E343A;"><b style="color:var(--accent); font-weight:600;">PLAN OF RECORD →</b></a>
+</div>
+
+<div class="erp">
+  <div class="erp-title">OsterNet · Scheduling &amp; Rooms · rollout 2014 <span class="dot"></span></div>
+  <div class="erp-tool">
+    <span class="on">Month</span><span>Week</span><span>Day</span><span>Rooms</span><span>Print</span>
+    <span class="erp-user">logged in: okafor.d · third floor</span>
+  </div>
+  <div class="cal">
+
+    <!-- FEBRUARY strip -->
+    <div class="mrow" id="m-feb"><h2>February</h2><span class="yr">project year</span><span class="chrome-tag"><b>DECIDE</b> · it begins with one sentence, late February</span></div>
+    <div class="strip" style="border-width:1px; border-color:var(--erp-line);">
+      <div class="chips">
+        <button class="chip" data-mid="m1">Tom's sentence at the operations review <b>late Feb · TB, DO, ME</b></button>
+        <button class="chip" data-mid="m3">[no invite existed] · P. Nair builds the demo <b>Thursday · four hours</b></button>
+        <button class="chip" data-mid="m4">The receivables demonstration <span class="clip">T1</span> <b>Friday 9:40 · six chairs</b></button>
+      </div>
+    </div>
+
+    <!-- MARCH -->
+    <div class="mrow"><h2>March</h2><span class="yr">project year</span><span class="chrome-tag"><b>DECIDE</b> · five of the calendar's densest weeks</span></div>
+    <table class="month">
+      <tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr>
+      <tr>
+        <td class="wknd"><div class="dn">1</div></td>
+        <td class="ph-decide"><div class="dn">2</div><button class="ev" data-mid="m2"><b>Queue observation wk begins</b><span class="t">AR bullpen · DO with RV</span></button></td>
+        <td class="ph-decide"><div class="dn">3</div></td>
+        <td class="ph-decide"><div class="dn">4</div></td>
+        <td class="ph-decide"><div class="dn">5</div></td>
+        <td class="ph-decide"><div class="dn">6</div><button class="ev" data-mid="m2b"><b>Observation debrief</b><span class="t">16:00 · the week logged</span></button></td>
+        <td class="wknd"><div class="dn">7</div></td>
+      </tr>
+      <tr>
+        <td class="wknd"><div class="dn">8</div></td>
+        <td class="ph-decide"><div class="dn">9</div></td>
+        <td class="ph-decide"><div class="dn">10</div></td>
+        <td class="ph-decide"><div class="dn">11</div></td>
+        <td class="ph-decide"><div class="dn">12</div></td>
+        <td class="ph-decide"><div class="dn">13</div></td>
+        <td class="wknd"><div class="dn">14</div></td>
+      </tr>
+      <tr>
+        <td class="wknd"><div class="dn">15</div></td>
+        <td class="ph-decide"><div class="dn">16</div></td>
+        <td class="ph-decide"><div class="dn">17</div></td>
+        <td class="ph-decide"><div class="dn">18</div></td>
+        <td class="ph-decide"><div class="dn">19</div></td>
+        <td class="ph-decide"><div class="dn">20</div></td>
+        <td class="wknd"><div class="dn">21</div></td>
+      </tr>
+      <tr>
+        <td class="wknd"><div class="dn">22</div></td>
+        <td class="ph-decide"><div class="dn">23</div><button class="ev" data-mid="m5"><b>Prototype-week kickoff</b><span class="t">9:00 · DO, PN, RV</span></button></td>
+        <td class="ph-decide"><div class="dn">24</div><button class="ev" data-mid="m6"><b>Stopping-condition sign-off</b><span class="t">DO, ME · before any run</span></button></td>
+        <td class="ph-decide"><div class="dn">25</div><button class="ev recur" data-mid="mr1"><b>Pod session</b><span class="t">weekly · DO, PN, RV</span></button></td>
+        <td class="ph-decide"><div class="dn">26</div><button class="ev big" data-mid="m7"><b>Prototype adjudication <span class="clip">T2</span></b><span class="t">9:00 · AR bullpen</span></button><button class="ev big" data-mid="m8"><b>Disposition of shapes <span class="clip">T2</span></b><span class="t">14:00 · 3rd floor</span></button></td>
+        <td class="ph-decide"><div class="dn">27</div></td>
+        <td class="wknd"><div class="dn">28</div></td>
+      </tr>
+      <tr>
+        <td class="wknd"><div class="dn">29</div></td>
+        <td class="ph-decide"><div class="dn">30</div></td>
+        <td class="ph-decide"><div class="dn">31</div></td>
+        <td class="out" colspan="4"></td>
+        <td class="out"></td>
+      </tr>
+    </table>
+
+    <!-- APRIL -->
+    <div class="mrow" id="m-apr"><h2>April</h2><span class="yr">project year</span><span class="chrome-tag"><b>DECIDE → DESIGN</b> · the seam is a memo, not a meeting</span></div>
+    <table class="month">
+      <tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr>
+      <tr>
+        <td class="out" colspan="3"></td>
+        <td class="ph-decide"><div class="dn">1</div><button class="ev recur" data-mid="mr1"><b>Pod session</b></button></td>
+        <td class="ph-decide"><div class="dn">2</div><button class="ev big" data-mid="m9"><b>Go / no-go <span class="clip">T3</span></b><span class="t">10:00 · all five · memo to CFO</span></button></td>
+        <td class="ph-design"><div class="dn">3</div></td>
+        <td class="wknd"><div class="dn">4</div></td>
+      </tr>
+      <tr>
+        <td class="wknd"><div class="dn">5</div></td>
+        <td class="ph-design"><div class="dn">6</div></td>
+        <td class="ph-design"><div class="dn">7</div></td>
+        <td class="ph-design"><div class="dn">8</div><button class="ev recur" data-mid="mr1"><b>Pod session</b></button></td>
+        <td class="ph-design"><div class="dn">9</div></td>
+        <td class="ph-design"><div class="dn">10</div></td>
+        <td class="wknd"><div class="dn">11</div></td>
+      </tr>
+      <tr>
+        <td class="wknd"><div class="dn">12</div></td>
+        <td class="ph-design"><div class="dn">13</div></td>
+        <td class="ph-design"><div class="dn">14</div><button class="ev" data-mid="m10"><b>The two-briefs session</b><span class="t">DO, PN · written from the prototypes</span></button></td>
+        <td class="ph-design"><div class="dn">15</div><button class="ev recur" data-mid="mr1"><b>Pod session</b></button></td>
+        <td class="ph-design"><div class="dn">16</div></td>
+        <td class="ph-design"><div class="dn">17</div></td>
+        <td class="wknd"><div class="dn">18</div></td>
+      </tr>
+      <tr>
+        <td class="wknd"><div class="dn">19</div></td>
+        <td class="ph-design"><div class="dn">20</div></td>
+        <td class="ph-design"><div class="dn">21</div><button class="ev big" data-mid="m11"><b>Design session: hours, memory, walls <span class="clip">T4</span></b><span class="t">14:00 · TB, PN, DO</span></button></td>
+        <td class="ph-design"><div class="dn">22</div><button class="ev recur" data-mid="mr1"><b>Pod session</b></button><button class="ev" data-mid="m10"><b>Both briefs dated &amp; filed</b><span class="t">Ex. C &amp; D</span></button></td>
+        <td class="ph-design"><div class="dn">23</div></td>
+        <td class="ph-design"><div class="dn">24</div></td>
+        <td class="wknd"><div class="dn">25</div></td>
+      </tr>
+      <tr>
+        <td class="wknd"><div class="dn">26</div></td>
+        <td class="ph-design"><div class="dn">27</div></td>
+        <td class="ph-design"><div class="dn">28</div></td>
+        <td class="ph-design"><div class="dn">29</div><button class="ev recur" data-mid="mr1"><b>Pod session</b></button></td>
+        <td class="ph-design"><div class="dn">30</div></td>
+        <td class="out" colspan="2"></td>
+      </tr>
+    </table>
+
+    <!-- MAY (condensed grid) -->
+    <div class="mrow"><h2>May</h2><span class="yr">project year</span><span class="chrome-tag"><b>DESIGN</b> · the persona month</span></div>
+    <div class="strip" style="border-width:1px; border-color:var(--erp-line);">
+      <div class="chips">
+        <button class="chip" data-mid="m12">Persona review · three cards, one with no photo <b>early May · DO, PN, ME</b></button>
+        <button class="chip" data-mid="m13">The approval screen · 90 seconds, six elements <b>6 May · DO, RV, ME, PN</b></button>
+        <button class="chip" data-mid="mr1">Pod sessions, weekly <b>Wednesdays</b></button>
+      </div>
+      <div class="note">6 May is canon (glance p.69) · persona review placed before it ⊕</div>
+    </div>
+
+    <!-- PROVE strip: project clock -->
+    <div class="mrow" id="s-prove"><h2>Prove</h2><span class="yr">project clock</span><span class="chrome-tag"><b>PROVE</b> · dated in weeks; the bible fixes no months here</span></div>
+    <div class="strip">
+      <h3><b>WK 8</b> → <b>WK 10</b> → <b>WK 11</b> · the version number is the fix loop</h3>
+      <div class="chips">
+        <button class="chip" data-mid="m14">Eval pass 1 readout · 79% pass@1, 4 of 12 clean <b>week 8 · RV grading, DO, PN</b></button>
+        <button class="chip" data-mid="m15">Eval pass 2 readout · 83%, 7 of 12 · the regression caught <b>week 10</b></button>
+        <button class="chip" data-mid="m15b">The week-nine ask · T. Brindle proposes rung 4 <b>week 9</b></button>
+        <button class="chip" data-mid="m16">All-owner readiness review · the four questions · a revocation · GO <span class="clip">T5</span> <b>week 11 · all five</b></button>
+      </div>
+      <div class="note">launch follows within the week · rung 2, nothing above the break</div>
+    </div>
+
+    <!-- AUGUST -->
+    <div class="mrow" id="m-aug"><h2>August</h2><span class="yr">operating months, launch clock</span><span class="chrome-tag"><b>OBSERVE</b> · one meeting; the calendar cannot see the incident</span></div>
+    <table class="month">
+      <tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr>
+      <tr>
+        <td class="out" colspan="6"></td>
+        <td class="wknd"><div class="dn">1</div></td>
+      </tr>
+      <tr>
+        <td class="wknd"><div class="dn">2</div></td>
+        <td class="ph-observe"><div class="dn">3</div></td>
+        <td class="ph-observe"><div class="dn">4</div><span class="ghost">R. Vaughn's spot check finds the 21 July send, by the account name · fourteen days after it went out · no meeting existed about it until now</span></td>
+        <td class="ph-observe"><div class="dn">5</div></td>
+        <td class="ph-observe"><div class="dn">6</div></td>
+        <td class="ph-observe"><div class="dn">7</div></td>
+        <td class="wknd"><div class="dn">8</div></td>
+      </tr>
+      <tr>
+        <td class="wknd"><div class="dn">9</div></td>
+        <td class="ph-observe"><div class="dn">10</div></td>
+        <td class="ph-observe"><div class="dn">11</div><button class="ev big" data-mid="m18"><b>Incident review <span class="clip">T6</span></b><span class="t">8:30 · all five</span></button></td>
+        <td class="ph-observe"><div class="dn">12</div></td>
+        <td class="ph-observe"><div class="dn">13</div></td>
+        <td class="ph-observe"><div class="dn">14</div></td>
+        <td class="wknd"><div class="dn">15</div></td>
+      </tr>
+      <tr>
+        <td class="wknd"><div class="dn">16</div></td>
+        <td class="ph-observe"><div class="dn">17</div></td>
+        <td class="ph-observe"><div class="dn">18</div></td>
+        <td class="ph-observe"><div class="dn">19</div></td>
+        <td class="ph-observe"><div class="dn">20</div></td>
+        <td class="ph-observe"><div class="dn">21</div></td>
+        <td class="wknd"><div class="dn">22</div></td>
+      </tr>
+      <tr>
+        <td class="wknd"><div class="dn">23</div></td>
+        <td class="ph-observe"><div class="dn">24</div></td>
+        <td class="ph-observe"><div class="dn">25</div></td>
+        <td class="ph-observe"><div class="dn">26</div></td>
+        <td class="ph-observe"><div class="dn">27</div></td>
+        <td class="ph-observe"><div class="dn">28</div></td>
+        <td class="wknd"><div class="dn">29</div></td>
+      </tr>
+      <tr>
+        <td class="wknd"><div class="dn">30</div></td>
+        <td class="ph-observe"><div class="dn">31</div></td>
+        <td class="out" colspan="5"></td>
+      </tr>
+    </table>
+
+    <!-- OPERATE strip -->
+    <div class="mrow" id="s-operate"><h2>The operating year</h2><span class="yr">launch + 12 months</span><span class="chrome-tag"><b>OPERATE</b> · the meetings thin out; the documents govern</span></div>
+    <div class="strip">
+      <div class="chips">
+        <button class="chip" data-mid="m19">Quarter review · rung 3 refused · kill number retired while met <b>end of quarter · DO, ME, RV</b></button>
+        <button class="chip" data-mid="m19a">CFO retirement handover <b>October · ME, incoming CFO</b></button>
+        <button class="chip" data-mid="m20">Accommodation: depot template <b>January</b></button>
+        <button class="chip" data-mid="m21">Accommodation: shipment records <b>February</b></button>
+        <button class="chip" data-mid="m22">Accommodation: national accounts <b>April</b></button>
+        <button class="chip" data-mid="m24">Rung-3 promotion · 1.4% <b>May</b></button>
+        <button class="chip" data-mid="m25">The reconstruction response <b>May · DO, ME, Legal</b></button>
+        <button class="chip" data-mid="m26">Cumulative-diff review · a revocation <b>June</b></button>
+        <button class="chip" data-mid="m27">Write-off restoration · both conditions met <b>June · ME, RV, DO</b></button>
+        <button class="chip" data-mid="m30">The year review · eval set nineteen <b>twelve months · all five</b></button>
+      </div>
+      <div class="note">this row is deliberately thin · five transcript meetings sit in the first sixteen weeks and one sits here at zero · the white space is the argument</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- modal -->
+<div class="ovl" id="ovl">
+  <div class="modal" role="dialog">
+    <div class="formbar"><span>MEETING RECORD · OSTERMILL</span><button class="x" id="mx">✕</button></div>
+    <div class="head">
+      <h2 id="mt"></h2>
+      <div class="meta" id="mm"></div>
+      <div class="who" id="mw"></div>
+    </div>
+    <section><h3>SUMMARY</h3><p id="ms"></p></section>
+    <section><h3>DECISIONS</h3><div id="md"></div></section>
+    <section><h3>ACTIONS</h3><div id="ma"></div></section>
+    <section id="mats" style="display:none;"><h3>ATTACHMENTS</h3><div id="mat"></div></section>
+    <section id="mtl" style="display:none;"><a class="tlink" id="mtx" target="_blank"></a></section>
+  </div>
+</div>
+
+<div class="chrome">
+  <span class="tagno">CF-021</span>
+  <span>Designed composite · dates marked ⊕ are placed for layout</span>
+  <span class="fill"></span>
+  <nav><a href="index-v3.html">OSTERMILL</a><a href="case-file.html">CASE FILE</a><a href="personas.html">PEOPLE</a><span class="cur">CALENDAR</span><a href="project-plan.html">PLAN</a><a href="prototypes.html">PROTOTYPES</a><a href="exhibits.html">EXHIBITS</a><a href="agent.html">AGENT</a><a href="eval-simulator.html">EVAL</a></nav>
+</div>
+
+<script>
+var M = {
+ m1:{t:"Tom's sentence: Agent v1",m:"Late February · monthly operations review",w:["T. Brindle","D. Okafor","M. Ellery"],
+   s:"T. Brindle proposed an agent that collects overdue receivables the way R. Vaughn collects them. Received with interest; no evaluation existed to test it against.",
+   d:["None taken."],a:["None recorded. The demonstration follows within the week."]},
+ m2:{t:"Queue observation week",m:"Week of 2 March · AR bullpen",w:["D. Okafor","R. Vaughn"],
+   s:"D. Okafor sat the week with R. Vaughn and logged it: 312 invoices aged past terms reviewed, 220 reminders sent, 41 held by judgment, 38 escalated or referred, 13 written off under the small-balance policy.",
+   d:["None taken. An observation week decides nothing; it makes deciding possible."],
+   a:["D. Okafor: the week as a log, one table. It becomes Exhibit A."]},
+ m2b:{t:"Observation debrief",m:"Friday · 16:00",w:["D. Okafor","R. Vaughn"],
+   s:"The week reviewed. The 41 holds break down 17 / 9 / 6 / 5 / 4 by stated reason, each reason given from memory, none recorded in any system.",
+   d:["The log is authoritative as written; nothing is cleaned."],
+   a:["D. Okafor: file the log."]},
+ m3:{t:"[No invite existed]",m:"Thursday · 13:00 to 17:00 · P. Nair's desk",w:["P. Nair"],
+   s:"P. Nair built a working demonstration in four hours: account export, invoice aging, notes field in; drafted reminder out. Five accounts, chosen by her. Nothing on any calendar. The chrome shows it because what it triggered was on every calendar that followed.",
+   d:["·"],a:["·"]},
+ m4:{t:"Receivables demonstration",m:"Friday, late February · 9:40 to 11:05 · third floor",w:["D. Okafor","R. Vaughn","M. Ellery","P. Nair","T. Brindle","the CFO"],
+   s:"P. Nair showed the demonstration. Five accounts. The drafts read fluent. R. Vaughn held one of the five on knowledge no system stores. By eleven the discussion concerned schedule.",
+   d:["None taken. No approval, budget, or scope was agreed. The proposed pilot was neither approved nor declined."],
+   a:["D. Okafor: bring a plan for evaluating the capability on real accounts. Requested by the CFO. No date set in the room."],x:"FULL TRANSCRIPT · T1"},
+ m5:{t:"Prototype-week kickoff",m:"Monday 23 March · 9:00",w:["D. Okafor","P. Nair","R. Vaughn"],
+   s:"Three shapes to be built badly and on purpose in one week: the judge, the sorter, the triager. Twenty cases selected, twelve drawn from the 41 holds. Selection basis: visibility of failure, not accuracy.",
+   d:["The three shapes and the case set fixed as above."],
+   a:["P. Nair: build all three by Thursday night.","D. Okafor: adjudication table for the 26th."]},
+ m6:{t:"Stopping-condition sign-off",m:"Tuesday 24 March",w:["D. Okafor","M. Ellery"],
+   s:"Written before any prototype run: if the best candidate writes to more than three of the twelve protected accounts, no agent is built.",
+   d:["The condition adopted as written, before results existed."],
+   a:["D. Okafor: the condition into the record ahead of the run."]},
+ m7:{t:"Prototype adjudication",m:"Thursday 26 March · 9:00 to 10:35 · AR bullpen",w:["R. Vaughn","D. Okafor","P. Nair"],
+   s:"One table, three columns, twenty cases. A: seven of twelve mishandled, confident on five. C: seven, silent. B: three, each stop naming the signal. R. Vaughn paused four times; the pauses, not the misses, drew the product line.",
+   d:["The table stands as adjudicated."],
+   a:["D. Okafor: log the four hesitation cases for the graded set."],x:"FULL TRANSCRIPT · T2"},
+ m8:{t:"Disposition of candidate shapes",m:"Thursday 26 March · 14:00 to 14:50 · third floor",w:["D. Okafor","P. Nair","T. Brindle"],
+   s:"Results presented as a table, not a demonstration. Dispositions agreed before money moved.",
+   d:["Shape A withdrawn: a records problem, not a model problem; not to be reopened as a capability question.","Shape C withdrawn: it ties A and cannot improve.","Agent v1 withdrawn by its proposer, never built.","Shape B proceeds to a decision memo. It never decides a hold."],
+   a:["D. Okafor: draft the go/no-go memo, target 2 April.","P. Nair: archive all three prototypes; nothing survives into the build."],x:"FULL TRANSCRIPT · T2"},
+ m9:{t:"Go / no-go",m:"Thursday 2 April · 10:00 to 11:20",w:["D. Okafor","R. Vaughn","M. Ellery","P. Nair","T. Brindle"],
+   s:"Agent v2 approved for Design. Costing per 1,000 reminders only: $8,400 clerk time, $310 module, $1,150 agent. M. Ellery refused a payback period and argued a retirement condition into the memo. The CFO signs without attending.",
+   d:["Go.","Outcome statement adopted verbatim.","Retirement condition: under 60% approved-without-edit by week 8 retires the agent. Week 4 is trajectory only.","Five non-goals, five named owners; the mid-renegotiation hold enters as a wall.","No payback period appears in the memo."],
+   a:["D. Okafor, P. Nair: the two briefs, from prototype behavior.","R. Vaughn: tone-policy sessions.","M. Ellery: the approved-without-edit instrument before launch."],x:"FULL TRANSCRIPT · T3"},
+ m10:{t:"The two-briefs session",m:"April · Design",w:["D. Okafor","P. Nair"],
+   s:"The Human Brief and the Executable Brief drafted from what the prototypes demonstrated, in that order. Build before you write. Both briefs dated and filed 22 April.",
+   d:["Two briefs, not one document pretending to serve both readers."],
+   a:["Both briefs to review within the week."]},
+ m11:{t:"Design session: hours, memory, walls",m:"April · 14:00 to 15:10",w:["T. Brindle","P. Nair","D. Okafor"],
+   s:"The twenty-hours claim corrected to eight by arithmetic. The 2021 CRM note read into the record. The mid-renegotiation hold moved from advisory signal to enforced wall keyed to a maintained flag.",
+   d:["Freed time is eight hours a week in every document.","Ninety seconds adopted, recorded as chosen, not researched.","Memory categories, eighteen-month retention; note-class signals expire.","The renegotiation wall keys to a flag T. Brindle's team maintains, with expiry.","Reject reasons fixed at five."],
+   a:["T. Brindle: the flag process; he owns freshness.","P. Nair: implement wall and expiry.","D. Okafor: correct twenty to eight everywhere it reached."],x:"FULL TRANSCRIPT · T4"},
+ m12:{t:"Persona review",m:"Early May · Design",w:["D. Okafor","P. Nair","M. Ellery"],
+   s:"Three persona cards for the approval-screen work. Card 3 has no photo, no quote, and no journey, for stated reasons. M. Ellery named owner of affected-person outcomes, in the design file, in advance.",
+   d:["The three cards adopted, the third exactly as the method produced it.","M. Ellery is the named owner of affected-person outcomes."],
+   a:["D. Okafor: cards into the design file."]},
+ m13:{t:"The approval screen review",m:"6 May · Design",w:["D. Okafor","R. Vaughn","M. Ellery","P. Nair"],
+   s:"The approval moment specified: ninety-second budget, six screen elements, the review split. R. Vaughn reads the ordinary queue; M. Ellery receives no more than 25 items a week, five of them drawn at random.",
+   d:["Six elements, not four.","The 25-a-week cap; overflow defers and is reported, never absorbed.","The five random items stay: a supervisor who sees only exceptions calibrates to a population that is not the product."],
+   a:["P. Nair: build to spec. Becomes Exhibit E."]},
+ m14:{t:"Eval pass 1 readout",m:"Week 8, project clock",w:["R. Vaughn","D. Okafor","P. Nair"],
+   s:"First measurement: 79% pass@1, 4 of 12 cases clean: twenty-five failures across 120 runs, sorted by cause. The readout instructs; it does not yet gate.",
+   d:["Fix list from the sort; remittance advice enters retrieval scope."],
+   a:["P. Nair: fixes; re-run the whole set, not what was touched."]},
+ m15:{t:"Eval pass 2 readout",m:"Week 10, project clock",w:["R. Vaughn","D. Okafor","P. Nair"],
+   s:"83%, 7 of 12 clean. The retrieval fix took payment-in-transit to ten of ten and dropped a passing adversarial case from nine to seven. Caught only because the whole set re-ran.",
+   d:["Regression to be recovered before the gate; the re-run rule is now law."],
+   a:["P. Nair: recover the adversarial case; adversarial hardening pass."]},
+ m16:{t:"All-owner readiness review",m:"Week 11, the week before launch · 9:00 to 10:45",w:["D. Okafor","R. Vaughn","M. Ellery","P. Nair","T. Brindle"],
+   s:"v3 readout: 86% pass@1, 8 of 12 clean, 103 of 120. The four-question review ran against every granted capability. On write-offs, P. Nair's $9 adversarial case showed a disputed charge conceded with no person in the path. M. Ellery revoked in under two minutes. Launch approved.",
+   d:["Launch at rung 2; every owner signed.","Write-off authority revoked; suspended, not retired, with recorded restoration conditions.","The worst slice accepted at rung 2 and pre-declared as the rung-3 refusal ground.","Eval v3 frozen as baseline."],
+   a:["P. Nair: runbook, walls telemetry day one.","M. Ellery, D. Okafor: six instruments live at launch.","M. Ellery: dispute-flag records proposal, owned outside the project."],x:"FULL TRANSCRIPT · T5"},
+ m18:{t:"Incident review",m:"11 August · 8:30 to 9:50",w:["D. Okafor","R. Vaughn","M. Ellery","P. Nair","T. Brindle"],
+   s:"A $410 reminder reached a nineteen-year account five days after the owner's death (invoice 4471; parts delivered May; 41 days past terms). The hold note sat in a field outside retrieval scope. Every wall held; all six instruments green; confidence 0.94. Found on R. Vaughn's spot check, day 20, by the account name.",
+   d:["Classified: signal exists, not reachable by a system. Not a model defect, and not to be written as one.","The graded set goes twelve to thirteen.","Records change initiated: structured hold flag, one-business-day SLA. Owner: M. Ellery, outside the project.","Retrieval NOT widened into free text, with the reason recorded.","M. Ellery contacts the family personally today; the invoice is closed by a person."],
+   a:["D. Okafor, R. Vaughn: author case thirteen.","P. Nair: verify wall telemetry unchanged; no quiet fixes.","M. Ellery: the call; the records proposal."],x:"FULL TRANSCRIPT · T6"},
+ m19:{t:"Quarter review",m:"End of quarter",w:["D. Okafor","M. Ellery","R. Vaughn"],
+   s:"Rung 3 for routine balances refused: a 6.1% override rate produced by a reviewer whose fastest decile is 9 seconds is not evidence about the agent alone. Separately, the kill number retired while comfortably met, because approved-without-edit measures the reviewer too.",
+   d:["Rung 3 refused; condition attached: a full quarter of random-sample review under 2% fresh-eyes disagreement.","Kill number retired and replaced: fresh-eyes disagreement on approved drafts over 8% for two consecutive months retires the agent."],
+   a:["M. Ellery: stand up the fresh-eyes sample."]},
+ m19a:{t:"CFO retirement handover",m:"October, launch year",w:["M. Ellery","the incoming CFO"],
+   s:"The signer of the original credit policy leaves. A quiet entry; its consequence surfaces in June, when authority must be re-confirmed before anything suspended can be restored.",
+   d:["Standard handover; no agent items on the agenda, which is the point the audit later makes."],a:["None recorded."]},
+ m20:{t:"Accommodation review: depot template",m:"January, operating year",w:["D. Okafor","P. Nair","T. Brindle"],
+   s:"A second template for depot accounts. Small, reasonable, approved.",d:["Approved."],a:["P. Nair: ship it; entry to the change record."]},
+ m21:{t:"Accommodation review: shipment records",m:"February, operating year",w:["D. Okafor","P. Nair","M. Ellery"],
+   s:"Retrieval widened to shipment records. Small, reasonable, approved.",d:["Approved."],a:["Entry to the change record."]},
+ m22:{t:"Accommodation review: national accounts",m:"April, operating year",w:["D. Okafor","P. Nair","T. Brindle","M. Ellery"],
+   s:"National accounts admitted, against the scope declaration. Each accommodation small, each reasonable, none worth blocking on the day.",
+   d:["Approved, against a declaration that is now three diffs old."],a:["Entry to the change record. The record is about to matter."]},
+ m24:{t:"Rung-3 promotion review",m:"May, operating year",w:["D. Okafor","M. Ellery","R. Vaughn"],
+   s:"Routine balances promoted to rung 3 at a 1.4% fresh-eyes disagreement rate after the full random-sample quarter. The only rung earned rather than refused in the record.",
+   d:["Promotion granted, on the evidence the refusal demanded."],a:["Instruments continue unchanged."]},
+ m25:{t:"The reconstruction response",m:"May, operating year",w:["D. Okafor","M. Ellery","Legal"],
+   s:"Counsel's request about a reminder sent the previous September, eight months and two model swaps earlier. Answered in full from the sealed record alone, because the output was stored and not only the inputs. Third incident traceable to the unset dispute flag.",
+   d:["Respond from the sealed record; nothing reconstructed from memory.","The records project is funded. Three strikes did what two could not."],
+   a:["M. Ellery: the records project charter."]},
+ m26:{t:"The cumulative-diff review",m:"June, operating year",w:["M. Ellery","D. Okafor","P. Nair"],
+   s:"The three accommodations diffed cumulatively against the April declaration. Individually small; together a different product than anyone approved.",
+   d:["National accounts revoked."],a:["Scope declaration re-issued; diff cadence fixed."]},
+ m27:{t:"Write-off restoration review",m:"June, operating year",w:["M. Ellery","R. Vaughn","D. Okafor"],
+   s:"Both recorded conditions met: the dispute flag fires within one business day, measured on forty disputes; four dispute-adjacent cases run ten of ten. Authority re-confirmed first through the delegation audit, because the signing CFO retired in October.",
+   d:["Write-off authority restored. Restoration took longer than revocation, deliberately."],
+   a:["Six-month review scheduled, M. Ellery with R. Vaughn."]},
+ m30:{t:"The year review",m:"Twelve months after launch",w:["D. Okafor","R. Vaughn","M. Ellery","P. Nair","T. Brindle"],
+   s:"Two model swaps absorbed under the personnel-change protocol. Eval set nineteen. Two case classes moved in the year; everything else sits where it launched. Exhibit I closes.",
+   d:["The revision record adopted as the year's account."],a:["Continue."]},
+ m15b:{t:"The week-nine ask",m:"Week 9, project clock",w:["T. Brindle","D. Okafor","P. Nair"],
+   s:"On the v1 number, T. Brindle asks the fair question: if it is right seventy-nine percent of the time and improving, why will a person still read every one. The ask is recorded; the answer waits for the gate, where two cases out of twelve settle it.",
+   d:["None taken; the proposal is docketed for the week-11 readiness review with the refusal ground to be pre-agreed there."],
+   a:["D. Okafor: carry the ask to the gate as a What-was-asked line on the readout."]},
+ mr1:{t:"Pod working session",m:"Weekly, Wednesdays, from prototype week",w:["D. Okafor","P. Nair","R. Vaughn"],
+   s:"The spine. Most artifacts are prepared here and decided elsewhere, which is why the calendar shows it small and the exhibits show it everywhere.",
+   d:["Standing series; decisions route to the meetings that own them."],a:["·"]}
+};
+var ATT = {
+ m2:[{e:"EXHIBIT A",x:1,t:"The before-state: Ruth's week as a log",h:"exhibits.html#ex-a"}],
+ m2b:[{e:"EXHIBIT A",x:1,t:"The log as filed: 312 reviewed · 220 sent · 41 held · 38 escalated · 13 written off",h:"exhibits.html#ex-a"}],
+ m4:[{e:"ARTIFACT",t:"Demonstration drafts, twelve accounts, five readings preserved. Retained, unfiled; no decision rested on them",h:"prototypes.html"}],
+ m5:[{e:"ARTIFACT",t:"Case selection table: 20 cases, 12 drawn from the 41 holds",h:"prototypes.html"}],
+ m6:[{e:"MEMO",t:"Stopping condition, signed 24 March, before any run",h:"prototypes.html"}],
+ m7:[{e:"ARTIFACT",t:"The adjudication table: 3 columns × 20 cases, marked in R. Vaughn's hand",h:"prototypes.html"}],
+ m8:[{e:"MEMO",t:"Dispositions of A, C, and Agent v1, with reasons stated in the decision text",h:"../transcripts/T2-adjudication-withdrawal.md"},
+     {e:"MARGIN",t:"D. Okafor, on the run table: \"whatever we build inherits this, not the clean rows\""}],
+ m9:[{e:"EXHIBIT B",x:1,t:"The go decision: suitability, three priced alternatives, the outcome statement, the no-go lines with named owners",h:"exhibits.html#ex-b"}],
+ m10:[{e:"EXHIBIT C",x:1,t:"The Human Brief, as filed",h:"briefs.html#human"},{e:"EXHIBIT D",x:1,t:"The Executable Brief, as filed",h:"briefs.html#executable"}],
+ m11:[{e:"RECORD",t:"CRM note, account 7-1449, March 2021: \"do not chase this account, ever\""},
+      {e:"POLICY",t:"Memory categories, eighteen-month retention"}],
+ m12:[{e:"CARDS",t:"The three design-phase personas, including the card with no photo",h:"persona-cards-v2.html"}],
+ m13:[{e:"EXHIBIT E",x:1,t:"The approval screen: the specification, running",h:"approval-screen.html"}],
+ m14:[{e:"READOUT",t:"Eval pass 1: 79% pass@1, 4 of 12 pass^10, failures sorted by cause",h:"eval-simulator.html"}],
+ m15:[{e:"READOUT",t:"Eval pass 2: 83%, 7 of 12; the regression on the adversarial case, noted",h:"eval-simulator.html"}],
+ m16:[{e:"EXHIBIT F",x:1,t:"The eval readout: 86%, 8 of 12 clean, 103 of 120, the worst slice named",h:"exhibits.html#ex-f"},
+      {e:"RECORD",t:"The $9 adversarial case: every precondition satisfied, no person in the path"},
+      {e:"MEMO",t:"Suspension of the write-off authority, restoration conditions recorded"}],
+ m18:[{e:"EXHIBIT H",x:1,t:"The incident and the postmortem, as filed",h:"exhibit-h-postmortem.html"},
+      {e:"RECORD",t:"CRM hold note, entered day 1, in a field outside retrieval scope"},
+      {e:"CASE 13",t:"Graded case authored from the incident; the set goes twelve to thirteen",h:"eval-simulator.html"}],
+ m19:[{e:"PACKET",t:"Quarter instruments: routine override 6.1% · fastest decile 9 seconds · routine balances 71% of volume",h:"exhibits.html#ex-g"}],
+ m19a:[{e:"RECORD",t:"The original credit policy, signed years earlier by the departing office-holder"}],
+ m20:[{e:"CHANGE",t:"Change record: depot-account template"}],
+ m21:[{e:"CHANGE",t:"Change record: retrieval widened to shipment records"}],
+ m22:[{e:"CHANGE",t:"Change record: national accounts, against the April declaration"}],
+ m24:[{e:"PACKET",t:"The fresh-eyes quarter: 1.4% disagreement on random sample"}],
+ m25:[{e:"EXHIBIT J",x:1,t:"The appeal: counsel's request answered from the sealed record alone",h:"exhibits.html#ex-j"}],
+ m26:[{e:"DIFF",t:"Cumulative diff: three accommodations against the scope declaration"}],
+ m27:[{e:"RECORD",t:"Restoration evidence: flag ≤1 business day on 40 disputes; four cases 10 of 10"},
+      {e:"AUDIT",t:"Authority-delegation audit, re-confirmed with the incoming CFO"}],
+ m30:[{e:"EXHIBIT I",x:1,t:"The revision record, launch to twelve months",h:"exhibit-i-revision-record.html"},
+      {e:"EXHIBIT K",x:1,t:"The role: the agent-supervisor posting, as posted",h:"exhibit-k-posting.html"}]
+};
+var PERSONA={"D. Okafor":"dana-okafor","R. Vaughn":"ruth-vaughn","Ruth Vaughn":"ruth-vaughn","M. Ellery":"marcus-ellery","P. Nair":"priya-nair","T. Brindle":"tom-brindle","Tom Brindle":"tom-brindle"};
+var ovl=document.getElementById('ovl');
+function openM(id){
+  var d=M[id]; if(!d) return;
+  document.getElementById('mt').textContent=d.t;
+  document.getElementById('mm').textContent=d.m;
+  var w=document.getElementById('mw'); w.innerHTML='';
+  d.w.forEach(function(p){
+    var slug=PERSONA[p];
+    var s=document.createElement(slug?'a':'span');
+    if(slug) s.href='personas.html#'+slug;
+    s.textContent=p; w.appendChild(s);
+  });
+  document.getElementById('ms').textContent=d.s;
+  function fill(el,items){
+    var box=document.getElementById(el); box.innerHTML='';
+    if(!items||items.length===0||items[0]==='·'){box.innerHTML='<p class="none">·</p>';return;}
+    if(items.length===1&&/^None/.test(items[0])){box.innerHTML='<p class="none">'+items[0]+'</p>';return;}
+    var ol=document.createElement('ol');
+    items.forEach(function(it){var li=document.createElement('li');li.textContent=it;ol.appendChild(li);});
+    box.appendChild(ol);
+  }
+  fill('md',d.d); fill('ma',d.a);
+  var ats=document.getElementById('mats'), ab=document.getElementById('mat');
+  var alist=ATT[id];
+  if(alist&&alist.length){
+    ats.style.display='block'; ab.innerHTML='';
+    alist.forEach(function(a){
+      var el=document.createElement(a.h?'a':'div');
+      el.className='att'; if(a.h)el.href=a.h;
+      var tg=document.createElement('span'); tg.className='tag'+(a.x?' ex':''); tg.textContent=a.e;
+      var tx=document.createElement('span'); tx.className='txt'; tx.textContent=a.t;
+      el.appendChild(tg); el.appendChild(tx); ab.appendChild(el);
+    });
+  } else { ats.style.display='none'; }
+  var tl=document.getElementById('mtl');
+  var TR={T1:'T1-friday-demo.md',T2:'T2-adjudication-withdrawal.md',T3:'T3-go-meeting.md',T4:'T4-hours-debate.md',T5:'T5-readiness-review.md',T6:'T6-postmortem.md'};
+  if(d.x){tl.style.display='block';var mx=document.getElementById('mtx');mx.textContent=d.x+' →';
+    var tm=d.x.match(/T[1-6]/); if(tm&&TR[tm[0]]){mx.href='../transcripts/'+TR[tm[0]];}else{mx.removeAttribute('href');}}
+  else{tl.style.display='none';}
+  ovl.classList.add('open');
+}
+document.querySelectorAll('[data-mid]').forEach(function(b){
+  b.addEventListener('click',function(){openM(b.getAttribute('data-mid'));});
+});
+if(location.hash){ var hid=location.hash.slice(1); if(M[hid]) openM(hid); }
+document.getElementById('mx').addEventListener('click',function(){ovl.classList.remove('open');});
+ovl.addEventListener('click',function(e){if(e.target===ovl)ovl.classList.remove('open');});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')ovl.classList.remove('open');});
+</script>
+
+</body>
+</html>

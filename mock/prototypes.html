@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The three prototypes · The Case File · Ostermill</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700&family=Archivo+Black&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:#14171A; --accent:#E8AE00; --green:#1E4D3B; --red:#B3261E;
+    --line:#DDDFE2; --gray:#F4F5F6; --field:#EFF1F2; --text:#23272C; --muted:#5F6870;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--gray); font-family:'Archivo',Arial,sans-serif; color:var(--text); padding:30px 20px 96px; }
+
+  .filehead { max-width:1020px; margin:0 auto 20px; }
+  .filehead .tab { display:inline-block; background:var(--ink); color:#fff; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:2px; padding:5px 12px; }
+  .filehead h1 { font-family:'Archivo Black',sans-serif; text-transform:uppercase; font-size:24px; color:var(--ink); margin-top:12px; }
+  .filehead h1::after { content:""; display:block; width:56px; height:4px; background:var(--accent); margin-top:8px; }
+  .filehead p { font-size:13.5px; color:var(--muted); margin-top:10px; max-width:80ch; line-height:1.55; }
+
+  .wrap { max-width:1020px; margin:0 auto; }
+
+  /* stopping condition banner */
+  .stopcond { background:#fff; border:3px solid var(--ink); display:flex; align-items:stretch; margin-bottom:18px; }
+  .stopcond .tag { background:var(--ink); color:var(--accent); font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:1.5px; padding:12px; display:flex; align-items:center; white-space:nowrap; }
+  .stopcond .txt { padding:12px 16px; font-size:13px; line-height:1.55; }
+  .stopcond .txt b { font-weight:700; }
+
+  /* three shape cards */
+  .shapes { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-bottom:18px; }
+  @media (max-width:860px){ .shapes { grid-template-columns:1fr; } }
+  .shape { background:#fff; border:3px solid var(--ink); display:flex; flex-direction:column; }
+  .shape.b { border-color:var(--ink); }
+  .shape .bar { background:var(--ink); color:#fff; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:1.5px; padding:6px 12px; display:flex; }
+  .shape .bar .fill { flex:1; }
+  .shape h2 { font-family:'Archivo Black',sans-serif; text-transform:uppercase; font-size:16px; padding:12px 14px 4px; color:var(--ink); }
+  .shape .what { padding:0 14px 10px; font-size:12.5px; color:var(--muted); line-height:1.5; }
+  .shape .score { display:flex; border-top:1.5px solid var(--ink); border-bottom:1.5px solid var(--ink); }
+  .shape .score div { flex:1; padding:8px 12px; }
+  .shape .score b { display:block; font-family:'Archivo Black',sans-serif; font-size:22px; }
+  .shape .score span { font-size:9.5px; letter-spacing:1px; text-transform:uppercase; color:var(--muted); }
+  .shape .fp { padding:10px 14px; font-size:12px; line-height:1.5; }
+  .shape .fp b { font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:1.5px; display:block; margin-bottom:4px; color:var(--ink); }
+  .shape .disp { margin-top:auto; padding:10px 14px 12px; border-top:1.5px solid var(--ink); font-size:12px; line-height:1.5; }
+  .shape .stamp { display:inline-block; font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:11px; letter-spacing:2px; border:2px solid var(--red); color:var(--red); padding:2px 8px; transform:rotate(-4deg); margin-bottom:6px; }
+  .shape.b .stamp { border-color:var(--green); color:var(--green); }
+
+  /* the table, re-fought */
+  .refight { background:#fff; border:3px solid var(--ink); }
+  .refight .bar { background:var(--ink); color:#fff; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:1.5px; padding:8px 14px; display:flex; align-items:center; gap:12px; }
+  .refight .bar .fill { flex:1; }
+  table { width:100%; border-collapse:collapse; table-layout:fixed; }
+  th { background:var(--field); color:var(--ink); font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:1px; text-align:left; padding:7px 12px; border-bottom:1.5px solid var(--ink); }
+  th:nth-child(1), td:nth-child(1) { width:7%; }
+  th:nth-child(2), td:nth-child(2) { width:29%; }
+  th:nth-child(3), td:nth-child(3),
+  th:nth-child(4), td:nth-child(4),
+  th:nth-child(5), td:nth-child(5) { width:21.3%; }
+  td { border-bottom:1px solid var(--line); padding:9px 12px; font-size:12.5px; vertical-align:top; line-height:1.5; }
+  td:nth-child(2) { font-size:11.5px; color:var(--muted); }
+  td:nth-child(2)::first-line { color:var(--text); }
+  tbody tr { cursor:pointer; }
+  tbody tr:hover td { background:#F7F9FA; }
+  tbody tr.on td { background:#FDF6E3; }
+  td.mono { font-family:'IBM Plex Mono',monospace; font-size:11px; white-space:nowrap; }
+  .mk { font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:600; }
+  .mk.ok { color:#2E7D4F; } .mk.bad { color:var(--red); } .mk.hold { color:#8a6a00; }
+
+  /* output panel */
+  .outs { display:grid; grid-template-columns:1fr 1fr 1fr; gap:0; border-top:3px solid var(--ink); }
+  @media (max-width:860px){ .outs { grid-template-columns:1fr; } }
+  .out { padding:12px 14px; border-right:1.5px solid var(--ink); }
+  .out:last-child { border-right:none; }
+  .out h3 { font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:1.5px; color:var(--ink); margin-bottom:7px; }
+  .doc { border:1px solid var(--line); background:#FDFDFC; padding:9px 11px; font-size:11.5px; line-height:1.55; min-height:88px; }
+  .doc.letter { font-family:Georgia, serif; }
+  .doc.silent { color:#9AA1A8; font-family:'IBM Plex Mono',monospace; font-size:10.5px; display:flex; align-items:center; justify-content:center; text-align:center; }
+  .doc.queue { font-family:'IBM Plex Mono',monospace; font-size:10.5px; border:1.5px solid var(--accent); background:#FFFDF4; }
+  .out .verdict { margin-top:6px; font-size:11px; color:var(--muted); }
+  .out .verdict b { color:var(--text); }
+
+  .foot { padding:11px 16px; background:var(--field); border-top:3px solid var(--ink); font-size:12.5px; line-height:1.6; }
+  .foot b { font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:1.5px; }
+
+  /* demo strip */
+  .demo { background:#fff; border:3px solid var(--ink); margin-bottom:18px; }
+  .demo .bar { background:var(--ink); color:#fff; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:1.5px; padding:8px 14px; display:flex; gap:12px; }
+  .demo .bar .fill { flex:1; }
+  .demo .row { display:grid; grid-template-columns:34px 1.1fr 1.6fr 1fr; gap:0; border-bottom:1px solid var(--line); }
+  .demo .row:last-child { border-bottom:none; }
+  .demo .row>div { padding:9px 12px; font-size:12px; line-height:1.5; }
+  .demo .row .n { font-family:'IBM Plex Mono',monospace; color:var(--muted); }
+  .demo .row .nm b { display:block; font-size:12.5px; }
+  .demo .row .nm span { font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--muted); }
+  .demo .row .dr { font-family:Georgia,serif; font-size:11.5px; color:#3A4148; background:#FDFDFC; border-left:1px solid var(--line); border-right:1px solid var(--line); }
+  .demo .row .rx { font-size:11.5px; color:var(--muted); }
+  .demo .dscroll { max-height:460px; overflow-y:auto; }
+  .demo .dscroll::-webkit-scrollbar { width:10px; }
+  .demo .dscroll::-webkit-scrollbar-thumb { background:var(--ink); }
+  .demo .dscroll::-webkit-scrollbar-track { background:var(--field); }
+  .demo .row.ghost>div { padding-top:6px; padding-bottom:6px; color:#A8AEB5; font-size:11px; }
+  .demo .row.ghost .dr { font-style:italic; background:#FBFBFA; }
+  .demo .row.ghost .n { color:#C2C7CC; }
+  .demo .row.flagged { background:#FDF6E3; }
+  .demo .row.flagged .rx b { color:#8a6a00; }
+  .demo .foot { padding:10px 14px; background:var(--field); border-top:3px solid var(--ink); font-size:12px; line-height:1.55; }
+  .chrome { position:fixed; bottom:0; left:0; right:0; background:var(--ink); color:#D6DADD; font-family:'IBM Plex Mono',monospace; font-size:11.5px; display:flex; align-items:center; gap:14px; padding:9px 16px; z-index:20; }
+  .chrome .tagno { background:var(--accent); color:var(--ink); font-weight:600; padding:3px 8px; }
+  .chrome .sep { color:#4A525A; }
+  .chrome a { color:#fff; }
+  .chrome .fill { flex:1; }
+  .chrome { flex-wrap:wrap; }
+  .chrome nav { display:flex; gap:11px; flex-wrap:wrap; }
+  .chrome nav a { text-decoration:none; }
+  .chrome nav a:hover { color:var(--accent); }
+  .chrome nav .cur { color:var(--accent); font-weight:600; }
+
+</style>
+</head>
+<body>
+
+<div class="filehead">
+  <span class="tab">THE CASE FILE · DECIDE · THE THREE PROTOTYPES · WEEK OF 23 MARCH</span>
+  <h1>Built badly, and on purpose</h1>
+  <p>Three shapes, one week, twenty cases, twelve of them from Ruth's forty-one holds.
+  On 26 March she adjudicated one table with three columns, in under two hours, and the
+  demonstration of late February was never mentioned again. The selection basis was not
+  accuracy. It was visibility of failure. Click a case and read what each shape
+  actually produced; the third column is the entire product decision.</p>
+</div>
+
+<div class="wrap">
+
+  <div class="stopcond">
+    <div class="tag">STOPPING CONDITION · 24 MARCH</div>
+    <div class="txt">Written before any run: <b>if the best candidate writes to more than three of the
+    twelve protected accounts, no agent is built.</b> B met it at exactly three. It survives
+    by nothing at all, except that the number was written down while nobody was
+    negotiating with a result.</div>
+  </div>
+
+  <div class="shapes">
+    <div class="shape">
+      <div class="bar"><span>SHAPE A</span><span class="fill"></span><span>THE JUDGE</span></div>
+      <h2>Decides the holds</h2>
+      <div class="what">Reads the account, decides send or hold, writes the letter. The
+      demonstration, grown up.</div>
+      <div class="score"><div><b>7 / 12</b><span>holds mishandled</span></div><div><b>5</b><span>of them confidently</span></div></div>
+      <div class="fp"><b>HOW ITS FAILURE PRESENTS</b>A confident, well-written letter to
+      the customer. Indistinguishable, on its face, from a correct one.</div>
+      <div class="disp"><span class="stamp">WITHDRAWN 26 MAR</span><br>The holds turn on
+      signals captured nowhere a system can read. A records problem, not a model
+      problem; recorded so it cannot be reopened as a capability question.</div>
+    </div>
+    <div class="shape">
+      <div class="bar"><span>SHAPE C</span><span class="fill"></span><span>THE SORTER</span></div>
+      <h2>Deterministic filter</h2>
+      <div class="what">Routes by flags and thresholds; the agent drafts whatever gets
+      through. No model in the deciding path.</div>
+      <div class="score"><div><b>7 / 12</b><span>holds mishandled</span></div><div><b>0</b><span>warnings of any kind</span></div></div>
+      <div class="fp"><b>HOW ITS FAILURE PRESENTS</b>Nothing. Silence. The case sails
+      through, because the holds are defined by the absence of a flag.</div>
+      <div class="disp"><span class="stamp">WITHDRAWN 26 MAR</span><br>A filter routes
+      only what someone flagged. It ties A on misses and, unlike A, it cannot improve.</div>
+    </div>
+    <div class="shape b">
+      <div class="bar"><span>SHAPE B</span><span class="fill"></span><span>THE TRIAGER</span></div>
+      <h2>Drafts, stops on signals</h2>
+      <div class="what">Drafts the routine outreach; stops on anything it cannot resolve
+      and hands the account over with the reason it stopped.</div>
+      <div class="score"><div><b>3 / 12</b><span>written to</span></div><div><b>9</b><span>stops, signal named each time</span></div></div>
+      <div class="fp"><b>HOW ITS FAILURE PRESENTS</b>A queue entry naming the signal
+      that stopped it. The only failure mode of the three that can be supervised.</div>
+      <div class="disp"><span class="stamp">PROCEEDS · MEMO 2 APR</span><br>Becomes
+      Agent v2. It never decides a hold: it writes to the 220 and hands over the 41
+      with a reason, which is the entire case for building it.</div>
+    </div>
+  </div>
+
+  <div class="demo" id="demo">
+    <div class="bar"><span>PRIYA'S TWELVE · LATE FEBRUARY · ONE PASS, NO GRADING</span><span class="fill"></span><span>5 PRESERVED · SCROLL FOR 12 ↓</span></div>
+    <div class="dscroll"><div id="demorows"></div></div>
+    <div class="foot"><b>WHAT THE TWELVE PROVED:</b> that the drafting feels real, which is all a
+    demonstration can prove. Five readings were reacted to and preserved; seven were
+    scrolled past and never discussed. The twenty below exist to answer the question
+    the twelve closed. Full record: transcript T1 · canon/demo-set-v1.json.</div>
+  </div>
+
+  <div class="refight">
+    <div class="bar"><span>THE TABLE, RE-FOUGHT</span><span class="fill"></span><span>THE 12 PROTECTED ACCOUNTS · THE 8 ROUTINE AGREED EVERYWHERE · CLICK A CASE</span></div>
+    <table>
+      <thead><tr><th>CASE</th><th>WHAT IT IS</th><th>A · JUDGE</th><th>C · SORTER</th><th>B · TRIAGER</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <div class="outs" id="outs" style="display:none;">
+      <div class="out"><h3>A PRODUCED</h3><div class="doc letter" id="oa"></div><div class="verdict" id="va"></div></div>
+      <div class="out"><h3>C PRODUCED</h3><div class="doc silent" id="oc"></div><div class="verdict" id="vc"></div></div>
+      <div class="out"><h3>B PRODUCED</h3><div class="doc queue" id="ob"></div><div class="verdict" id="vb"></div></div>
+    </div>
+    <div class="foot"><b>WHERE THIS GOES:</b> nine of these twenty survive into the
+    graded set, joined by three constructed adversarial cases that no real week could
+    contain. The twelve become <a href="eval-simulator.html" style="color:var(--ink); font-weight:700;">the eval bench</a>,
+    and Ruth's four pauses during this session become the handover rule. Full record:
+    transcript T2.</div>
+  </div>
+
+</div>
+
+<div class="chrome">
+  <span class="tagno">CF-041</span>
+  <span>Designed composite · dispute-case outputs follow the adjudication record ⊕</span>
+  <span class="fill"></span>
+  <nav><a href="index-v3.html">OSTERMILL</a><a href="case-file.html">CASE FILE</a><a href="personas.html">PEOPLE</a><a href="calendar.html">CALENDAR</a><a href="project-plan.html">PLAN</a><span class="cur">PROTOTYPES</span><a href="exhibits.html">EXHIBITS</a><a href="agent.html">AGENT</a><a href="eval-simulator.html">EVAL</a></nav>
+</div>
+
+<script src="../canon/golden-set-v1.js"></script>
+<script src="../canon/demo-set-v1.js"></script>
+<script>
+// demo strip
+var dr=document.getElementById('demorows');
+DEMO.records.forEach(function(r){
+  var div=document.createElement('div');
+  div.className='row'+(r.flagged_by_ruth?' flagged':'');
+  div.innerHTML='<div class="n">'+r.order_shown+'</div>'+
+   '<div class="nm"><b>'+r.account.name+'</b><span>'+r.account.texture+' · inv '+r.account.invoice+'</span></div>'+
+   '<div class="dr">'+r.draft+'</div>'+
+   '<div class="rx">'+(r.flagged_by_ruth?'<b>THE CATCH · </b>':'')+r.reception+'</div>';
+  dr.appendChild(div);
+});
+// accounts 6 through 12: shown in the room, scrolled past, not preserved in the file
+for(var g=6; g<=12; g++){
+  var gd=document.createElement('div');
+  gd.className='row ghost';
+  gd.innerHTML='<div class="n">'+g+'</div>'+
+   '<div class="nm"><b>Account not preserved</b><span>name not carried into the record</span></div>'+
+   '<div class="dr">Draft shown and scrolled past. Not preserved in this file.</div>'+
+   '<div class="rx">'+(g===12?'By the last drafts the room was discussing schedule, not letters. That is the finding.':'No reaction recorded.')+'</div>';
+  dr.appendChild(gd);
+}
+
+// the table, re-fought: the 12 protected from the golden set
+function isRoutine(c){ return c["class"]==="routine" || /^Routine/.test(c.title); }
+var PROTECTED=GOLDEN.cases.filter(function(c){return c.membership.in_twenty && !isRoutine(c);});
+var MARK={correct:["ok","✓"],correct_draft:["ok","✓ drafted"],correct_stop:["hold","⏸ stopped"],
+  mishandled_confident:["bad","✕ confident letter"],mishandled:["bad","✕ hedged letter"],
+  mishandled_silent:["bad","✕ silent send"],wrote_to_protected:["bad","✕ wrote to it"]};
+function mark(res){ var m=MARK[res.result]||["ok",res.result]; return '<span class="mk '+m[0]+'">'+m[1]+'</span>'; }
+var rows=document.getElementById('rows');
+PROTECTED.forEach(function(c){
+  var p=c.prototype_26mar;
+  var tr=document.createElement('tr');
+  tr.innerHTML='<td class="mono">'+c.id+'</td><td>'+c.title+' · '+(c.account&&c.account.texture?c.account.texture:'')+'</td>'+
+   '<td>'+mark(p.A)+'</td><td>'+mark(p.C)+'</td><td>'+mark(p.B)+'</td>';
+  tr.addEventListener('click',function(){
+    document.querySelectorAll('tbody tr').forEach(function(x){x.classList.remove('on');});
+    tr.classList.add('on');
+    document.getElementById('outs').style.display='grid';
+    var sh=c.showcase;
+    document.getElementById('oa').textContent = sh?sh.oa:p.A.output;
+    document.getElementById('oc').textContent = sh?sh.oc:p.C.output;
+    document.getElementById('ob').textContent = sh?sh.ob:p.B.output;
+    document.getElementById('va').innerHTML = sh?sh.va:'';
+    document.getElementById('vc').innerHTML = sh?sh.vc:'';
+    document.getElementById('vb').innerHTML = sh?sh.vb:'';
+  });
+  rows.appendChild(tr);
+});
+</script>
+
+</body>
+</html>

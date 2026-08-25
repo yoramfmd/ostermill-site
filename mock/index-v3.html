@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ostermill Industrial Supply · Bearings, Seals, Fasteners & Hydraulics · Columbus, Ohio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700&family=Archivo+Black&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:#14171A; --ink2:#22262B; --accent:#E8AE00; --green:#1E4D3B;
+    --line:#DDDFE2; --gray:#F4F5F6; --text:#23272C; --muted:#5F6870;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#fff; color:var(--text); font-family:'Archivo',Arial,sans-serif; padding-bottom:58px; }
+  a { text-decoration:none; }
+
+  /* topline */
+  .topline { background:var(--ink); color:#C9CED3; font-size:12px; padding:7px 28px; display:flex; gap:22px; }
+  .topline .fill { flex:1; }
+  .topline a { color:#C9CED3; }
+  .topline b { color:#fff; font-weight:600; }
+
+  /* header: search-first */
+  .hd { display:flex; align-items:center; gap:26px; padding:16px 28px; border-bottom:1px solid var(--line); flex-wrap:wrap; }
+  .logo { font-family:'Archivo Black',sans-serif; font-size:24px; letter-spacing:-0.5px; text-transform:uppercase; color:var(--ink); white-space:nowrap; }
+  .logo .d { color:var(--accent); }
+  .logo small { display:block; font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:2px; color:var(--muted); font-weight:400; margin-top:2px; }
+  .search { flex:1; display:flex; min-width:280px; max-width:640px; }
+  .search input { flex:1; border:2px solid var(--ink); border-right:none; padding:11px 14px; font-size:14px; font-family:'Archivo',sans-serif; }
+  .search input::placeholder { color:#8B939B; }
+  .search button { background:var(--accent); border:2px solid var(--ink); padding:0 20px; font-weight:700; cursor:pointer; font-size:15px; }
+  .hd .util { display:flex; gap:20px; align-items:center; font-size:13px; font-weight:600; color:var(--ink); }
+  .hd .util a { color:var(--ink); }
+  .hd .util .cart { position:relative; }
+  .hd .util .cart::after { content:"0"; position:absolute; top:-8px; right:-12px; background:var(--accent); color:var(--ink); font-size:10px; font-weight:700; padding:1px 5px; border-radius:8px; }
+
+  nav.cats { background:var(--ink2); padding:0 28px; display:flex; gap:2px; }
+  nav.cats a { color:#D6DADD; font-size:12.5px; font-weight:600; letter-spacing:0.4px; padding:11px 14px; }
+  nav.cats a:hover, nav.cats a.here { background:#000; color:#fff; box-shadow:inset 0 -3px 0 var(--accent); }
+
+  /* section heading pattern: condensed caps + short accent bar */
+  .shead { font-family:'Archivo Black',sans-serif; text-transform:uppercase; font-size:22px; color:var(--ink); letter-spacing:0.2px; }
+  .shead::after { content:""; display:block; width:56px; height:4px; background:var(--accent); margin-top:8px; }
+
+  /* hero */
+  .hero { display:grid; grid-template-columns:1.15fr 1fr; gap:0; align-items:center; border-bottom:1px solid var(--line); }
+  @media (max-width:860px){ .hero { grid-template-columns:1fr; } }
+  .hero .txt { padding:46px 28px; }
+  .hero h1 { font-family:'Archivo Black',sans-serif; font-size:34px; line-height:1.1; text-transform:uppercase; color:var(--ink); max-width:17ch; }
+  .hero h1::after { content:""; display:block; width:72px; height:5px; background:var(--accent); margin-top:12px; }
+  .hero p { margin-top:16px; font-size:15px; line-height:1.6; max-width:50ch; color:var(--muted); }
+  .hero .ctas { margin-top:22px; display:flex; gap:12px; flex-wrap:wrap; }
+  .btn { display:inline-block; font-size:13px; font-weight:700; padding:12px 20px; border:2px solid var(--ink); }
+  .btn.pri { background:var(--ink); color:#fff; }
+  .btn.pri:hover { background:var(--accent); color:var(--ink); border-color:var(--ink); }
+  .btn.sec { color:var(--ink); background:#fff; }
+  .hero .ph { align-self:stretch; background:var(--gray); border-left:1px solid var(--line); display:flex; align-items:center; justify-content:center; min-height:300px; position:relative; }
+  .phbox { text-align:center; }
+  .phbox .plate { font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:1px; color:var(--muted); margin-top:12px; }
+  .sku { position:absolute; bottom:14px; right:16px; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted); }
+  svg.draw { display:block; margin:0 auto; }
+  svg.draw * { vector-effect:non-scaling-stroke; }
+
+  /* category grid */
+  section.wrap { max-width:1120px; margin:0 auto; padding:38px 28px 8px; }
+  .grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:20px; }
+  @media (max-width:900px){ .grid { grid-template-columns:repeat(2,1fr); } }
+  .cat { border:1px solid var(--line); background:#fff; }
+  .cat:hover { border-color:var(--ink); }
+  .cat .img { height:110px; background:var(--gray); display:flex; align-items:center; justify-content:center; border-bottom:1px solid var(--line); }
+  .cat .img svg { stroke:#2A3138; }
+  .cat .lbl { padding:10px 12px 12px; }
+  .cat .lbl b { display:block; font-size:13.5px; color:var(--ink); }
+  .cat .lbl span { font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--muted); }
+  .morelink { display:inline-block; margin-top:16px; font-size:13px; font-weight:700; color:var(--ink); border-bottom:2px solid var(--accent); padding-bottom:2px; }
+
+  /* value cards (About-Motion pattern) */
+  .vals { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:20px; }
+  @media (max-width:860px){ .vals { grid-template-columns:1fr; } }
+  .val { border:1px solid var(--line); padding:18px; }
+  .val h3 { font-family:'Archivo Black',sans-serif; text-transform:uppercase; font-size:14px; color:var(--ink); margin-bottom:8px; }
+  .val p { font-size:13px; line-height:1.6; color:var(--muted); }
+
+  /* industries */
+  .inds { display:grid; grid-template-columns:repeat(6,1fr); gap:12px; margin-top:20px; }
+  @media (max-width:900px){ .inds { grid-template-columns:repeat(3,1fr); } }
+  .ind { border:1px solid var(--line); }
+  .ind .img { height:74px; background:var(--gray); border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:center; }
+  .ind .img svg { stroke:#2A3138; }
+  .ind b { display:block; font-size:11.5px; padding:8px 10px; color:var(--ink); }
+
+  /* stats band */
+  .stats { background:var(--ink); color:#fff; margin-top:40px; }
+  .stats .inner { max-width:1120px; margin:0 auto; padding:26px 28px; display:flex; flex-wrap:wrap; }
+  .stat { flex:1; min-width:130px; padding:6px 12px; border-right:1px solid #2E343A; }
+  .stat:last-child { border-right:none; }
+  .stat b { display:block; font-family:'Archivo Black',sans-serif; font-size:24px; color:var(--accent); }
+  .stat span { font-size:10.5px; letter-spacing:1.5px; text-transform:uppercase; color:#9AA1A8; }
+
+  footer { border-top:1px solid var(--line); padding:26px 28px; }
+  footer .inner { max-width:1120px; margin:0 auto; display:flex; gap:48px; flex-wrap:wrap; font-size:12.5px; }
+  footer b { display:block; color:var(--ink); margin-bottom:8px; font-size:12px; letter-spacing:1px; text-transform:uppercase; }
+  footer a { display:block; color:var(--muted); margin-bottom:5px; }
+  footer a:hover { color:var(--ink); }
+
+  /* chrome: calm evidence tag */
+  .chrome { position:fixed; bottom:0; left:0; right:0; background:var(--ink); color:#D6DADD; font-family:'IBM Plex Mono',monospace; font-size:11.5px; display:flex; align-items:center; gap:14px; padding:9px 16px; z-index:20; border-top:1px solid #000; }
+  .chrome .tagno { background:var(--accent); color:var(--ink); font-weight:600; padding:3px 8px; }
+  .chrome .sep { color:#4A525A; }
+  .chrome a { color:#fff; text-decoration:underline; text-underline-offset:2px; }
+  .chrome .fill { flex:1; }
+  .chrome { flex-wrap:wrap; }
+  .chrome nav { display:flex; gap:11px; flex-wrap:wrap; }
+  .chrome nav a { text-decoration:none; }
+  .chrome nav a:hover { color:var(--accent); }
+  .chrome nav .cur { color:var(--accent); font-weight:600; }
+
+</style>
+</head>
+<body>
+
+<div class="topline">
+  <span>1-800-OSTERMILL</span>
+  <span>Will call 6:30–17:00 · Columbus DC</span>
+  <span class="fill"></span>
+  <a href="#">Support</a>
+  <a href="#"><b>Sign in</b></a>
+  <a href="#">Register</a>
+</div>
+
+<div class="hd">
+  <div class="logo">Ostermill<span class="d">.</span><small>INDUSTRIAL SUPPLY · EST. 1935</small></div>
+  <div class="search">
+    <input type="text" placeholder="Search by product name or part number, e.g. OSM-4471">
+    <button>⌕</button>
+  </div>
+  <div class="util">
+    <a href="#">Quick Order</a>
+    <a href="#">Locations</a>
+    <a href="#" class="cart">Cart</a>
+  </div>
+</div>
+
+<nav class="cats">
+  <a href="#" class="here">All Products</a>
+  <a href="#">Bearings</a>
+  <a href="#">Seals</a>
+  <a href="#">Fasteners</a>
+  <a href="#">Hydraulics</a>
+  <a href="#">Industries</a>
+  <a href="personas.html">Our People</a>
+</nav>
+
+<div class="hero">
+  <div class="txt">
+    <h1>Parts today. Terms that outlast the invoice.</h1>
+    <p>Bearings, seals, fasteners and hydraulics for the plants and shops that build
+    things. Fourteen thousand Midwest businesses buy from Ostermill on net thirty, and
+    most have for a long time.</p>
+    <div class="ctas">
+      <a class="btn pri" href="#">Open a trade account</a>
+      <a class="btn sec" href="#">Find a depot</a>
+    </div>
+  </div>
+  <div class="ph">
+    <div class="phbox">
+      <svg class="draw" width="280" height="200" viewBox="0 0 280 200" fill="none" stroke="#2A3138" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <!-- pillow block base -->
+        <path d="M30 178 L250 178 L250 150 C250 142 244 138 236 138 L44 138 C36 138 30 142 30 150 Z"/>
+        <ellipse cx="58" cy="158" rx="10" ry="6"/>
+        <ellipse cx="222" cy="158" rx="10" ry="6"/>
+        <!-- housing -->
+        <circle cx="140" cy="94" r="58"/>
+        <circle cx="140" cy="94" r="40"/>
+        <circle cx="140" cy="94" r="22"/>
+        <circle cx="140" cy="94" r="6" fill="#E8AE00" stroke="none"/>
+        <!-- shoulders joining housing to base -->
+        <path d="M86 118 L74 138"/>
+        <path d="M194 118 L206 138"/>
+        <!-- grease fitting -->
+        <path d="M140 36 L140 24 M133 24 L147 24"/>
+        <!-- section hatch on inner ring -->
+        <path d="M110 74 L122 62 M104 88 L116 76 M106 104 L118 92" stroke-width="1.2"/>
+      </svg>
+      <div class="plate">PLATE 12 · PILLOW BLOCK BEARING, 2-BOLT, CAST IRON</div>
+    </div>
+    <div class="sku">OSM-1204-PB · IN STOCK, COLUMBUS</div>
+  </div>
+</div>
+
+<section class="wrap">
+  <div class="shead">Shop by category</div>
+  <div class="grid">
+    <a class="cat" href="#"><div class="img">
+      <svg class="draw" width="96" height="70" viewBox="0 0 96 70" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 62 L82 62 L82 52 C82 49 80 47 77 47 L19 47 C16 47 14 49 14 52 Z"/>
+        <ellipse cx="24" cy="55" rx="4" ry="2.5"/><ellipse cx="72" cy="55" rx="4" ry="2.5"/>
+        <circle cx="48" cy="30" r="20"/><circle cx="48" cy="30" r="12"/>
+        <circle cx="48" cy="30" r="3" fill="#E8AE00" stroke="none"/>
+        <path d="M30 38 L26 47 M66 38 L70 47"/>
+      </svg>
+    </div><div class="lbl"><b>Bearings</b><span>OSM-1000 series</span></div></a>
+    <a class="cat" href="#"><div class="img">
+      <svg class="draw" width="96" height="70" viewBox="0 0 96 70" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="42" cy="36" r="24"/><circle cx="42" cy="36" r="15"/>
+        <circle cx="76" cy="20" r="8"/>
+        <path d="M72 16 L80 24 M76 14 L82 20" stroke-width="1.2"/>
+        <path d="M60 26 L69 22" stroke-dasharray="2 3" stroke-width="1.2"/>
+        <circle cx="42" cy="36" r="2.5" fill="#E8AE00" stroke="none"/>
+      </svg>
+    </div><div class="lbl"><b>Seals</b><span>OSM-2000 series</span></div></a>
+    <a class="cat" href="#"><div class="img">
+      <svg class="draw" width="96" height="70" viewBox="0 0 96 70" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M16 26 L26 18 L36 26 L36 44 L26 52 L16 44 Z"/>
+        <path d="M16 26 L36 26 M16 44 L36 44" stroke-width="1.2"/>
+        <path d="M36 30 L82 30 L82 40 L36 40"/>
+        <path d="M44 30 L44 40 M52 30 L52 40 M60 30 L60 40 M68 30 L68 40 M76 30 L76 40" stroke-width="1.2"/>
+        <circle cx="26" cy="35" r="2.5" fill="#E8AE00" stroke="none"/>
+      </svg>
+    </div><div class="lbl"><b>Fasteners</b><span>OSM-3000 series</span></div></a>
+    <a class="cat" href="#"><div class="img">
+      <svg class="draw" width="96" height="70" viewBox="0 0 96 70" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="12" y="26" width="44" height="20" rx="2"/>
+        <path d="M56 34 L82 34 M56 38 L82 38"/>
+        <circle cx="86" cy="36" r="4"/>
+        <path d="M20 26 L20 18 M17 18 L23 18 M44 26 L44 18 M41 18 L47 18"/>
+        <path d="M12 32 L8 32 L8 40 L12 40" />
+        <rect x="30" y="30" width="4" height="12" fill="#E8AE00" stroke="none"/>
+      </svg>
+    </div><div class="lbl"><b>Hydraulics</b><span>OSM-4000 series</span></div></a>
+    <a class="cat" href="#"><div class="img">
+      <svg class="draw" width="96" height="70" viewBox="0 0 96 70" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="48" cy="35" r="16"/>
+        <path d="M64 35 L70 35 M62 43 L67 46 M56 49 L59 54 M48 51 L48 57 M40 49 L37 54 M34 43 L29 46 M32 35 L26 35 M34 27 L29 24 M40 21 L37 16 M48 19 L48 13 M56 21 L59 16 M62 27 L67 24"/>
+        <circle cx="48" cy="35" r="6"/>
+        <path d="M45 29.5 L51 29.5" stroke-width="1.4"/>
+        <circle cx="48" cy="35" r="2" fill="#E8AE00" stroke="none"/>
+      </svg>
+    </div><div class="lbl"><b>Power Transmission</b><span>Belts, chain, sprockets</span></div></a>
+    <a class="cat" href="#"><div class="img">
+      <svg class="draw" width="96" height="70" viewBox="0 0 96 70" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 22 C40 22 40 48 58 48 L70 48"/>
+        <path d="M22 27 C37 27 37 53 58 53 L70 53" stroke-width="1.2"/>
+        <path d="M10 18 L22 18 L22 31 L10 31 Z"/>
+        <path d="M13 18 L13 31 M17 18 L17 31" stroke-width="1.2"/>
+        <path d="M70 44 L82 44 L82 57 L70 57 Z"/>
+        <path d="M74 44 L74 57 M78 44 L78 57" stroke-width="1.2"/>
+        <circle cx="86" cy="50" r="2" fill="#E8AE00" stroke="none"/>
+      </svg>
+    </div><div class="lbl"><b>Hose &amp; Fittings</b><span>Bench in every depot</span></div></a>
+    <a class="cat" href="#"><div class="img">
+      <svg class="draw" width="96" height="70" viewBox="0 0 96 70" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="31" cy="22" r="11"/>
+        <circle cx="31" cy="22" r="4.5"/>
+        <path d="M39 30 L63 55 A5.5 5.5 0 0 0 71 47 L47 23"/>
+        <circle cx="66" cy="50" r="2" fill="#E8AE00" stroke="none"/>
+      </svg>
+    </div><div class="lbl"><b>Maintenance &amp; Shop</b><span>Lubricants, tools, PPE</span></div></a>
+    <a class="cat" href="#"><div class="img">
+      <svg class="draw" width="96" height="70" viewBox="0 0 96 70" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M48 18 C40 12 26 12 18 16 L18 52 C26 48 40 48 48 54 C56 48 70 48 78 52 L78 16 C70 12 56 12 48 18 Z"/>
+        <path d="M48 18 L48 54"/>
+        <path d="M24 22 L42 20 M24 28 L42 26 M24 34 L42 32 M54 20 L72 22 M54 26 L72 28" stroke-width="1.2"/>
+        <path d="M54 32 L64 33" stroke="#E8AE00" stroke-width="2.4"/>
+      </svg>
+    </div><div class="lbl"><b>Full Catalog</b><span>Printed since 1951</span></div></a>
+  </div>
+  <a class="morelink" href="#">View all categories →</a>
+</section>
+
+<section class="wrap">
+  <div class="shead">Why Ostermill</div>
+  <div class="vals">
+    <div class="val"><h3>Counter people who catch it</h3><p>The difference between what was ordered and what was meant, caught before it ships. Ninety-one years of practice.</p></div>
+    <div class="val"><h3>Deep stock, same day</h3><p>Stocked deep enough that a line-down call gets parts today. Order by 15:00 for depot transfer.</p></div>
+    <div class="val"><h3>Terms run on judgment</h3><p>Most of our customers know us by name, and the relationship outlasts any invoice. We run receivables accordingly.</p></div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="shead">Industries we serve</div>
+  <div class="inds">
+    <div class="ind"><div class="img">
+      <svg class="draw" width="72" height="48" viewBox="0 0 72 48" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 40 L66 40"/>
+        <rect x="10" y="18" width="14" height="22"/>
+        <circle cx="30" cy="28" r="7"/><circle cx="30" cy="28" r="2"/>
+        <path d="M37 28 L58 28 M58 24 L58 32" />
+        <path d="M52 24 L52 32" stroke-width="1.2"/>
+      </svg>
+    </div><b>Machine Shops</b></div>
+    <div class="ind"><div class="img">
+      <svg class="draw" width="72" height="48" viewBox="0 0 72 48" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="50" cy="34" r="10"/><circle cx="50" cy="34" r="3.5"/>
+        <circle cx="20" cy="38" r="6"/><circle cx="20" cy="38" r="2"/>
+        <path d="M26 38 L40 38 M14 32 L14 22 L34 22 L38 30 M34 22 L34 14 L44 14 L48 24"/>
+      </svg>
+    </div><b>Agriculture Equipment</b></div>
+    <div class="ind"><div class="img">
+      <svg class="draw" width="72" height="48" viewBox="0 0 72 48" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 42 L14 16 A8 8 0 0 1 30 16 L30 42 Z"/>
+        <path d="M40 42 L40 20 A7 7 0 0 1 54 20 L54 42 Z"/>
+        <path d="M30 26 L40 26" stroke-width="1.2"/>
+        <path d="M14 34 L30 34" stroke-width="1.2"/>
+      </svg>
+    </div><b>Food &amp; Beverage</b></div>
+    <div class="ind"><div class="img">
+      <svg class="draw" width="72" height="48" viewBox="0 0 72 48" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 12 L40 26 L34 34 L14 18 Z"/>
+        <path d="M40 26 L48 30" />
+        <path d="M54 34 L60 40 M56 28 L64 32 M50 38 L54 46" stroke-width="1.4"/>
+        <circle cx="50" cy="33" r="1.8" fill="#E8AE00" stroke="none"/>
+      </svg>
+    </div><b>Metal Fabrication</b></div>
+    <div class="ind"><div class="img">
+      <svg class="draw" width="72" height="48" viewBox="0 0 72 48" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="8" y="14" width="36" height="20"/>
+        <path d="M44 20 L56 20 L62 28 L62 34 L44 34"/>
+        <circle cx="18" cy="37" r="4"/><circle cx="52" cy="37" r="4"/>
+        <path d="M22 37 L48 37" stroke-width="1.2"/>
+      </svg>
+    </div><b>Fleet &amp; Depot</b></div>
+    <div class="ind"><div class="img">
+      <svg class="draw" width="72" height="48" viewBox="0 0 72 48" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10 42 L10 22 L24 30 L24 22 L38 30 L38 22 L52 30 L52 42 Z"/>
+        <path d="M58 42 L58 14 L64 14 L64 42" />
+        <path d="M16 34 L20 34 M30 34 L34 34 M44 34 L48 34" stroke-width="1.2"/>
+      </svg>
+    </div><b>Plant Maintenance</b></div>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="inner">
+    <div class="stat"><b>1935</b><span>Founded, Columbus</span></div>
+    <div class="stat"><b>640</b><span>People</span></div>
+    <div class="stat"><b>14,000</b><span>Trade customers</span></div>
+    <div class="stat"><b>DC + 3</b><span>Locations</span></div>
+    <div class="stat"><b>Net 30</b><span>Standard terms</span></div>
+  </div>
+</div>
+
+<footer>
+  <div class="inner">
+    <div><b>Ostermill</b><a href="#">Columbus DC</a><a href="#">Depot locations</a><a href="#">Will-call hours</a></div>
+    <div><b>Trade</b><a href="#">Open an account</a><a href="#">Terms &amp; credit</a><a href="#">Remittance</a></div>
+    <div><b>Company</b><a href="personas.html">Our people</a><a href="#">Careers</a><a href="#">Contact</a></div>
+  </div>
+</footer>
+
+<div class="chrome">
+  <span class="tagno">CF-001</span>
+  <span>Ostermill is a designed composite · no real company, no real people</span>
+  <span class="fill"></span>
+  <nav><span class="cur">OSTERMILL</span><a href="case-file.html">CASE FILE</a><a href="personas.html">PEOPLE</a><a href="calendar.html">CALENDAR</a><a href="project-plan.html">PLAN</a><a href="prototypes.html">PROTOTYPES</a><a href="exhibits.html">EXHIBITS</a><a href="agent.html">AGENT</a><a href="eval-simulator.html">EVAL</a></nav>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The eval bench · The Case File · Ostermill</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700&family=Archivo+Black&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:#14171A; --accent:#E8AE00; --green:#1E4D3B; --red:#B3261E;
+    --line:#DDDFE2; --gray:#F4F5F6; --field:#EFF1F2; --text:#23272C; --muted:#5F6870;
+    --ok:#2E7D4F; --bad:#B3261E;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--gray); font-family:'Archivo',Arial,sans-serif; color:var(--text); padding:30px 20px 96px; }
+
+  .filehead { max-width:980px; margin:0 auto 20px; }
+  .filehead .tab { display:inline-block; background:var(--ink); color:#fff; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:2px; padding:5px 12px; }
+  .filehead h1 { font-family:'Archivo Black',sans-serif; text-transform:uppercase; font-size:24px; color:var(--ink); margin-top:12px; }
+  .filehead h1::after { content:""; display:block; width:56px; height:4px; background:var(--accent); margin-top:8px; }
+  .filehead p { font-size:13.5px; color:var(--muted); margin-top:10px; max-width:78ch; line-height:1.55; }
+
+  .bench { max-width:980px; margin:0 auto; background:#fff; border:3px solid var(--ink); }
+  .bar { background:var(--ink); color:#fff; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:1.5px; display:flex; align-items:center; gap:14px; padding:8px 14px; flex-wrap:wrap; }
+  .bar .fill { flex:1; }
+  .vbtn { background:none; border:1px solid #4A525A; color:#C9CED3; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:1px; padding:4px 10px; cursor:pointer; }
+  .vbtn.on { background:var(--accent); border-color:var(--accent); color:var(--ink); font-weight:600; }
+  .runbtn { background:var(--accent); border:none; color:var(--ink); font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:11px; letter-spacing:1.5px; padding:7px 16px; cursor:pointer; }
+  .runbtn:hover { background:#fff; }
+
+  .scores { display:flex; border-bottom:3px solid var(--ink); }
+  .score { flex:1; padding:14px 18px; border-right:1.5px solid var(--ink); }
+  .score:last-child { border-right:none; }
+  .score b { display:block; font-family:'Archivo Black',sans-serif; font-size:30px; color:var(--ink); min-height:38px; }
+  .score span { font-size:10.5px; letter-spacing:1px; text-transform:uppercase; color:var(--muted); line-height:1.5; display:block; margin-top:3px; }
+
+  table { width:100%; border-collapse:collapse; }
+  th { background:var(--ink); color:#fff; font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:1px; text-align:left; padding:7px 12px; font-weight:600; }
+  td { border-bottom:1px solid var(--line); padding:10px 12px; vertical-align:top; font-size:12.5px; line-height:1.5; }
+  tbody tr { cursor:pointer; }
+  tbody tr:hover td { background:#F7F9FA; }
+  td.mono { font-family:'IBM Plex Mono',monospace; font-size:11px; white-space:nowrap; }
+  td .tex { font-weight:600; }
+  td .tex .more { font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:1px; color:var(--muted); border:1px solid var(--line); padding:0 5px; margin-left:8px; vertical-align:1px; }
+  td .ruth { color:var(--muted); font-size:11.5px; margin-top:2px; }
+  td .ruth b { color:var(--text); font-weight:600; }
+  .hes { display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:1px; border:1px solid var(--accent); color:#8a6a00; padding:0 5px; margin-left:6px; vertical-align:1px; }
+  .dots span { display:inline-block; width:13px; height:13px; border-radius:2px; margin-right:3px; background:var(--field); border:1px solid var(--line); }
+  .dots span.ok { background:#DDEBE2; border-color:var(--ok); }
+  .dots span.bad { background:#F3DBD9; border-color:var(--bad); }
+  td .n { font-family:'IBM Plex Mono',monospace; font-size:11px; margin-left:6px; }
+  tr.worst td { background:#FDF6E3; }
+
+  .slice { padding:12px 18px; border-top:3px solid var(--ink); background:var(--field); font-size:12.5px; line-height:1.6; }
+  .slice b { font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:1.5px; }
+  .slice .warn { color:var(--red); font-weight:600; }
+
+  /* case detail modal */
+  .ovl { display:none; position:fixed; inset:0; background:rgba(20,23,26,0.55); z-index:30; align-items:flex-start; justify-content:center; padding:5vh 16px; }
+  .ovl.open { display:flex; }
+  .modal { background:#fff; border:3px solid var(--ink); max-width:720px; width:100%; max-height:88vh; overflow-y:auto; }
+  .modal .formbar { background:var(--ink); color:#fff; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:1.5px; display:flex; padding:7px 14px; align-items:center; }
+  .modal .formbar .x { margin-left:auto; cursor:pointer; background:none; border:none; color:#fff; font-size:14px; }
+  .modal .head { padding:14px 18px 12px; border-bottom:3px solid var(--ink); }
+  .modal .head h2 { font-family:'Archivo Black',sans-serif; text-transform:uppercase; font-size:17px; color:var(--ink); }
+  .modal .head .cl { display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:1.5px; padding:2px 8px; margin-top:8px; border:1.5px solid var(--ink); }
+  .modal .head .cl.c1 { border-color:var(--ok); color:var(--ok); }
+  .modal .head .cl.c2 { border-color:var(--red); color:var(--red); }
+  .modal .head .cl.c4 { border-color:#8a6a00; color:#8a6a00; }
+  .modal section { padding:12px 18px; border-bottom:1px solid var(--line); }
+  .modal section:last-of-type { border-bottom:none; }
+  .modal h3 { font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:2px; color:var(--ink); margin-bottom:7px; font-weight:600; }
+  .modal p { font-size:12.5px; line-height:1.6; }
+  .rec { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  @media (max-width:640px){ .rec { grid-template-columns:1fr; } }
+  .pane { border:1.5px solid var(--ink); }
+  .pane.out { border-style:dashed; border-color:#A8AEB5; }
+  .pane .ph { font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:1.5px; padding:5px 10px; background:var(--ink); color:#fff; }
+  .pane.out .ph { background:#fff; color:var(--muted); border-bottom:1px dashed #A8AEB5; }
+  .pane dl { padding:8px 10px; font-family:'IBM Plex Mono',monospace; font-size:10.5px; line-height:1.8; }
+  .pane dt { color:var(--muted); float:left; clear:left; width:44%; }
+  .pane dd { margin-left:46%; color:var(--text); }
+  .pane dd.hot { color:var(--red); font-weight:600; }
+  .pane dd.acc { color:#8a6a00; font-weight:600; }
+  .perf { width:100%; border-collapse:collapse; font-size:11.5px; }
+  .perf th { font-size:9px; padding:5px 8px; }
+  .perf td { padding:6px 8px; font-family:'IBM Plex Mono',monospace; font-size:11px; border-bottom:1px solid var(--line); }
+  .modal .why { background:var(--field); border-left:4px solid var(--accent); padding:9px 12px; font-size:12px; line-height:1.55; }
+
+  .chrome { position:fixed; bottom:0; left:0; right:0; background:var(--ink); color:#D6DADD; font-family:'IBM Plex Mono',monospace; font-size:11.5px; display:flex; align-items:center; gap:14px; padding:9px 16px; z-index:20; }
+  .chrome .tagno { background:var(--accent); color:var(--ink); font-weight:600; padding:3px 8px; }
+  .chrome .sep { color:#4A525A; }
+  .chrome a { color:#fff; }
+  .chrome .fill { flex:1; }
+  .chrome { flex-wrap:wrap; }
+  .chrome nav { display:flex; gap:11px; flex-wrap:wrap; }
+  .chrome nav a { text-decoration:none; }
+  .chrome nav a:hover { color:var(--accent); }
+  .chrome nav .cur { color:var(--accent); font-weight:600; }
+
+</style>
+</head>
+<body>
+
+<div class="filehead">
+  <span class="tab">THE CASE FILE · PROVE · THE EVAL BENCH</span>
+  <h1>Run the eval yourself</h1>
+  <p>All twelve graded cases, wired to the golden set. Every press of RUN draws ten
+  samples per case FROM THE RECORDED RUNS, with replacement, which is the point: green
+  is a sample, not a property, and the observed rate wobbles around the true one.
+  Click a case for its full record. Switch eval versions to watch the fix loop work,
+  and watch what it cannot fix.</p>
+</div>
+
+<div class="bench">
+  <div class="bar">
+    <span>EVAL VERSION</span>
+    <button class="vbtn" data-v="v1">v1 · WK 8</button>
+    <button class="vbtn" data-v="v2">v2 · WK 10</button>
+    <button class="vbtn on" data-v="v3">v3 · WK 11 · SHIPPED</button>
+    <span class="fill"></span>
+    <button class="runbtn" id="run">RUN 10× PER CASE</button>
+  </div>
+
+  <div class="scores">
+    <div class="score"><b id="p1">·</b><span>pass@1 · share of all runs that succeed</span></div>
+    <div class="score"><b id="pk">·</b><span>pass^10 · cases clean in ten of ten</span></div>
+    <div class="score"><b id="wc">·</b><span>worst case this sample</span></div>
+  </div>
+
+  <table>
+    <thead><tr><th>CASE</th><th>WHAT IT IS · RUTH'S CALL</th><th>RUNS (THIS SAMPLE)</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+
+  <div class="slice" id="slice">Press RUN. The bench reports nothing it has not sampled.</div>
+</div>
+
+<!-- case detail -->
+<div class="ovl" id="ovl">
+  <div class="modal">
+    <div class="formbar"><span id="mfb">GRADED CASE</span><button class="x" id="mx">✕</button></div>
+    <div class="head"><h2 id="mt"></h2><span class="cl" id="mcl"></span></div>
+    <section><h3>THE CASE</h3><p id="mstory"></p></section>
+    <section>
+      <h3>THE DATA SAMPLE · WHAT THE AGENT CAN AND CANNOT READ</h3>
+      <div class="rec">
+        <div class="pane"><div class="ph">INSIDE RETRIEVAL SCOPE</div><dl id="min"></dl></div>
+        <div class="pane out"><div class="ph">OUTSIDE RETRIEVAL SCOPE</div><dl id="mout"></dl></div>
+      </div>
+    </section>
+    <section><h3>RUTH'S ADJUDICATION</h3><p id="mruth"></p></section>
+    <section>
+      <h3>RECORDED PERFORMANCE · TEN RUNS PER VERSION</h3>
+      <table class="perf"><thead><tr><th>VERSION</th><th>SCORE</th><th>WHAT CHANGED</th></tr></thead><tbody id="mperf"></tbody></table>
+    </section>
+    <section><div class="why" id="mwhy"></div></section>
+  </div>
+</div>
+
+<div class="chrome">
+  <span class="tagno">CF-031</span>
+  <span>Wired to canon · sampling draws from the recorded runs</span>
+  <span class="fill"></span>
+  <nav><a href="index-v3.html">OSTERMILL</a><a href="case-file.html">CASE FILE</a><a href="personas.html">PEOPLE</a><a href="calendar.html">CALENDAR</a><a href="project-plan.html">PLAN</a><a href="prototypes.html">PROTOTYPES</a><a href="exhibits.html">EXHIBITS</a><a href="agent.html">AGENT</a><span class="cur">EVAL</span></nav>
+</div>
+
+<script src="../canon/golden-set-v1.js"></script>
+<script>
+var CLSMAP={routine:["OBSERVED · THE ORDINARY QUEUE","c1"],
+ signal_resolvable:["OBSERVED · SIGNAL PRESENT, RESOLVABLE","c1"],
+ signal_unresolvable:["OBSERVED · SIGNAL EXISTS, NOT REACHABLE","c2"],
+ adversarial:["CONSTRUCTED · ADVERSARIAL, GR-05","c4"]};
+var WHY={routine:"The ordinary case calibrates everything else: a system judged only on hard cases looks worse than it is; judged only on these, better.",
+ signal_resolvable:"Cause one or its neighbors: the signal is reachable in principle, and the fix list is engineering. What ships unfixed ships NAMED.",
+ signal_unresolvable:"No model fixes an empty field. The ceiling moves when the record does; this class is why the records project exists.",
+ adversarial:"Constructed under GR-05, because a real week never volunteers an attack. Every fix re-runs the whole set."};
+var CASES=GOLDEN.cases.filter(function(c){return c.membership.in_graded_12;}).map(function(g){
+ return {id:g.id, tex:g.title, sig:g.signal||"", hes:!!(g.ruth&&g.ruth.hesitated),
+  ruth:(g.ruth&&g.ruth.call)?g.ruth.call:"— (constructed; graded against the written criterion)",
+  reason:(g.ruth&&g.ruth.reason)?g.ruth.reason:"",
+  crit:g.pass_criterion||"", cls:CLSMAP[g["class"]][0], clc:CLSMAP[g["class"]][1],
+  story:g.story||"", rin:(g.data_sample||{}).in_scope||[], rout:(g.data_sample||{}).out_scope||[],
+  perf:{v1:[g.eval.v1.score+"/10",g.eval.v1.note],v2:[g.eval.v2.score+"/10",g.eval.v2.note],v3:[g.eval.v3.score+"/10",g.eval.v3.note]},
+  rec:{v1:g.eval.v1.runs,v2:g.eval.v2.runs,v3:g.eval.v3.runs},
+  why:WHY[g["class"]]+" ("+g["class"].replace(/_/g," ")+", v3: "+g.eval.v3.note+")",
+  worst:g["class"]==="signal_unresolvable"};
+});
+var version="v3";
+function render(results){
+  var tb=document.getElementById('rows'); tb.innerHTML='';
+  var totalOk=0, clean=0, worstCase=null, worstScore=11;
+  CASES.forEach(function(c,i){
+    var runs=results?results[i]:null;
+    var ok=runs?runs.filter(Boolean).length:null;
+    if(runs){ totalOk+=ok; if(ok===10)clean++; if(ok<worstScore){worstScore=ok;worstCase=c.id;} }
+    var tr=document.createElement('tr'); tr.setAttribute('data-i',i);
+    if(runs&&ok<=7&&c.worst) tr.className='worst';
+    var dots=runs?runs.map(function(r){return '<span class="'+(r?'ok':'bad')+'"></span>';}).join(''):'<span></span>'.repeat(10);
+    tr.innerHTML='<td class="mono">'+c.id+'</td>'+
+     '<td><div class="tex">'+c.tex+(c.hes?'<span class="hes">RUTH HESITATED</span>':'')+'<span class="more">OPEN CASE ⊕</span></div>'+
+     '<div class="ruth">'+c.sig+'<br><b>Ruth:</b> '+c.ruth+' · <b>Pass =</b> '+c.crit+'</div></td>'+
+     '<td><div class="dots">'+dots+'</div>'+(runs?'<span class="n">'+ok+' / 10</span>':'')+'</td>';
+    tr.addEventListener('click',function(){openCase(i);});
+    tb.appendChild(tr);
+  });
+  if(results){
+    var p1=Math.round(100*totalOk/(CASES.length*10));
+    document.getElementById('p1').textContent=p1+'%';
+    document.getElementById('pk').textContent=clean+' of '+CASES.length;
+    document.getElementById('wc').textContent=worstCase+' · '+worstScore+'/10';
+    var msg;
+    if(version==='v1') msg='<b>THE SORT (WK 8):</b> twenty-five failures across 120 recorded runs, sorted by cause, not by count. C05 is a defect (an afternoon). C08 is a <span class="warn">records problem</span>; no model fixes an empty field. C09 ceilings on stale data. Only one of the three belongs to engineering.';
+    else if(version==='v2') msg='<b>THE REGRESSION (WK 10):</b> the retrieval fix took C05 to ten of ten and dropped GR5-A1 from nine to seven. Caught only because the whole set re-ran. It never recovers: it ships named rather than fixed.';
+    else msg='<b>WHAT SHIPPED (WK 11):</b> C05 fixed. GR5-A1 NOT recovered: seven of ten, named on the readout, the honest form of an unfixed regression. C07 ships at four of ten because its failure is benign at rung 2. C08 and C09 unchanged: their ceilings are the records, not the model. The same misses are why rung 4 was refused. Run it again; the movement between samples is what a single green checkmark hides.';
+    document.getElementById('slice').innerHTML=msg;
+  }
+}
+function fillDl(el,rows){ el.innerHTML='';
+  rows.forEach(function(r){var dt=document.createElement('dt');dt.textContent=r[0];
+   var dd=document.createElement('dd');dd.textContent=r[1];if(r[2])dd.className=r[2];
+   el.appendChild(dt);el.appendChild(dd);});}
+function openCase(i){
+  var c=CASES[i];
+  document.getElementById('mfb').textContent='GRADED CASE · '+c.id+' · GOLDEN SET v1';
+  document.getElementById('mt').textContent=c.tex;
+  var cl=document.getElementById('mcl'); cl.textContent=c.cls; cl.className='cl '+c.clc;
+  document.getElementById('mstory').textContent=c.story;
+  fillDl(document.getElementById('min'),c.rin);
+  fillDl(document.getElementById('mout'),c.rout);
+  document.getElementById('mruth').textContent=c.ruth+(c.reason?' · '+c.reason:'');
+  var pb=document.getElementById('mperf'); pb.innerHTML='';
+  ['v1','v2','v3'].forEach(function(v){var tr=document.createElement('tr');
+   tr.innerHTML='<td>'+v+'</td><td><b>'+c.perf[v][0]+'</b></td><td style="font-family:Archivo,Arial,sans-serif;font-size:12px;">'+c.perf[v][1]+'</td>';
+   pb.appendChild(tr);});
+  document.getElementById('mwhy').textContent=c.why;
+  document.getElementById('ovl').classList.add('open');
+}
+function run(){
+  var results=CASES.map(function(c){
+    var pool=c.rec[version], out=[];
+    for(var i=0;i<10;i++) out.push(!!pool[Math.floor(Math.random()*pool.length)]);
+    return out;
+  });
+  render(results);
+}
+document.querySelectorAll('.vbtn').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.vbtn').forEach(function(x){x.classList.remove('on');});
+    b.classList.add('on'); version=b.getAttribute('data-v'); run();
+  });
+});
+document.getElementById('run').addEventListener('click',run);
+var ovl=document.getElementById('ovl');
+document.getElementById('mx').addEventListener('click',function(){ovl.classList.remove('open');});
+ovl.addEventListener('click',function(e){if(e.target===ovl)ovl.classList.remove('open');});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')ovl.classList.remove('open');});
+render(null);
+</script>
+
+</body>
+</html>

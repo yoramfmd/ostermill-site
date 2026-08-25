@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design-phase personas · The Case File · Ostermill</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700&family=Archivo+Black&family=IBM+Plex+Mono:wght@400;600&family=Caveat:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:#14171A; --accent:#E8AE00; --green:#1E4D3B; --red:#B3261E;
+    --line:#DDDFE2; --gray:#F4F5F6; --field:#EFF1F2; --text:#23272C; --muted:#5F6870;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--gray); font-family:'Archivo',Arial,sans-serif; color:var(--text); padding:30px 20px 96px; }
+
+  .filehead { max-width:1100px; margin:0 auto 24px; }
+  .filehead .tab { display:inline-block; background:var(--ink); color:#fff; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:2px; padding:5px 12px; }
+  .filehead h1 { font-family:'Archivo Black',sans-serif; text-transform:uppercase; font-size:24px; color:var(--ink); margin-top:12px; }
+  .filehead h1::after { content:""; display:block; width:56px; height:4px; background:var(--accent); margin-top:8px; }
+  .filehead p { font-size:13.5px; color:var(--muted); margin-top:10px; max-width:72ch; line-height:1.55; }
+
+  .pair { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:26px; align-items:start; }
+  @media (max-width:920px){ .pair { grid-template-columns:1fr; } }
+
+  /* the sheet: a paperwork surface, thick rules legal */
+  .sheet { background:#fff; border:3px solid var(--ink); display:flex; flex-direction:column; }
+  .formbar { background:var(--ink); color:#fff; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:1.5px; display:flex; padding:7px 14px; }
+  .formbar .fill { flex:1; }
+
+  .head { display:flex; gap:18px; padding:18px 18px 14px; border-bottom:3px solid var(--ink); align-items:flex-start; }
+  .portrait { width:92px; height:110px; border:2px solid var(--ink); background:var(--gray); flex-shrink:0; display:flex; align-items:center; justify-content:center; position:relative; }
+  .portrait.void { border:2px dashed #AEB4BA; background:#fff; }
+  .portrait.void span { font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:#9AA1A8; text-align:center; line-height:1.5; letter-spacing:1px; }
+  .who { flex:1; }
+  .who h2 { font-family:'Archivo Black',sans-serif; font-size:20px; text-transform:uppercase; color:var(--ink); line-height:1.15; }
+  .who .role { display:inline-block; margin-top:7px; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:1.5px; padding:3px 8px; background:var(--accent); color:var(--ink); font-weight:600; }
+  .who .role.ghost { background:#fff; border:1.5px dashed #AEB4BA; color:var(--muted); }
+  .who .meta { font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted); margin-top:8px; line-height:1.6; }
+
+  .quote { padding:12px 18px 14px; border-bottom:1.5px solid var(--ink); background:var(--field); }
+  .quote label { display:block; font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:2px; color:var(--muted); margin-bottom:5px; }
+  .quote p { font-size:14px; line-height:1.5; font-weight:600; }
+  .quote.empty p { font-weight:400; color:var(--muted); font-size:13px; }
+
+  .facts { display:flex; border-bottom:3px solid var(--ink); }
+  .facts div { flex:1; padding:10px 12px 12px; border-right:1.5px solid var(--ink); }
+  .facts div:last-child { border-right:none; }
+  .facts b { display:block; font-family:'Archivo Black',sans-serif; font-size:20px; color:var(--ink); }
+  .facts span { font-size:10px; letter-spacing:0.5px; text-transform:uppercase; color:var(--muted); line-height:1.3; display:block; margin-top:2px; }
+
+  .grid { display:grid; grid-template-columns:1fr 1fr; }
+  .cell { padding:13px 16px 15px; border-bottom:1.5px solid var(--ink); position:relative; }
+  .cell:nth-child(odd){ border-right:1.5px solid var(--ink); }
+  .cell:nth-last-child(-n+2){ border-bottom:3px solid var(--ink); }
+  .cell h3 { font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--ink); margin-bottom:9px; font-weight:600; }
+  .cell ul { list-style:none; }
+  .cell li { font-size:12.5px; line-height:1.5; margin-bottom:6px; padding-left:13px; position:relative; }
+  .cell li::before { content:"▪"; position:absolute; left:0; top:0; color:var(--accent); font-size:10px; }
+  .cell .why { font-size:12px; color:var(--muted); line-height:1.55; max-width:34ch; }
+  .stamp { display:inline-block; font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:13px; letter-spacing:3px; color:var(--green); border:2px solid var(--green); padding:3px 10px; transform:rotate(-6deg); opacity:0.75; margin:2px 0 8px; }
+
+  .margin { padding:12px 18px 16px; background:var(--field); margin-top:auto; }
+  .margin label { display:block; font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:2px; color:var(--muted); margin-bottom:2px; }
+  .margin p { font-family:'Caveat',cursive; font-size:19px; line-height:1.3; color:#3A4148; }
+  .margin.hot { border-top:3px solid var(--ink); }
+  .margin.hot .flag { display:inline-block; font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:10.5px; letter-spacing:2px; color:var(--red); border:2px solid var(--red); padding:2px 8px; transform:rotate(-3deg); margin-bottom:6px; }
+
+  .chrome { position:fixed; bottom:0; left:0; right:0; background:var(--ink); color:#D6DADD; font-family:'IBM Plex Mono',monospace; font-size:11.5px; display:flex; align-items:center; gap:14px; padding:9px 16px; z-index:20; }
+  .chrome .tagno { background:var(--accent); color:var(--ink); font-weight:600; padding:3px 8px; }
+  .chrome .sep { color:#4A525A; }
+  .chrome a { color:#fff; text-decoration:underline; text-underline-offset:2px; }
+  .chrome .fill { flex:1; }
+  .chrome { flex-wrap:wrap; }
+  .chrome nav { display:flex; gap:11px; flex-wrap:wrap; }
+  .chrome nav a { text-decoration:none; }
+  .chrome nav a:hover { color:var(--accent); }
+  .chrome nav .cur { color:var(--accent); font-weight:600; }
+
+
+  svg.draw * { vector-effect:non-scaling-stroke; }
+</style>
+</head>
+<body>
+
+<div class="filehead">
+  <span class="tab">THE CASE FILE · DESIGN PHASE · MAY</span>
+  <h1>Personas for the second product</h1>
+  <p>Prepared by D. Okafor for the approval-screen work. Two of three shown. The third
+  card is included exactly as the method produced it.</p>
+</div>
+
+<div class="pair">
+
+  <!-- ============ CARD 1 · the supervising user ============ -->
+  <div class="sheet">
+    <div class="formbar"><span>PERSONA RECORD · FORM PD-2</span><span class="fill"></span><span>CARD 1 OF 3</span></div>
+    <div class="head">
+      <div class="portrait">
+        <img src="assets/portrait-ruth-vaughn.png" alt="Portrait of Ruth Vaughn (drawing)" style="width:100%;height:100%;object-fit:cover;object-position:center top;display:block;">
+      </div>
+      <div class="who">
+        <h2>Ruth Vaughn</h2>
+        <span class="role">THE SUPERVISING USER</span>
+        <div class="meta">SENIOR RECEIVABLES CLERK<br>COLUMBUS · 22 YEARS</div>
+      </div>
+    </div>
+    <div class="quote">
+      <label>IN HER WORDS</label>
+      <p>"I can tell you why I held every one of them. Nobody ever asked before March."</p>
+    </div>
+    <div class="facts">
+      <div><b>220</b><span>drafts / week, ordinary queue</span></div>
+      <div><b>90s</b><span>budget per draft</span></div>
+      <div><b>41</b><span>holds / week, hers alone</span></div>
+      <div><b>3</b><span>actions: approve · edit · reject</span></div>
+    </div>
+    <div class="grid">
+      <div class="cell">
+        <h3>Goals</h3>
+        <ul>
+          <li>See why the agent judged a case ordinary, not just what it drafted</li>
+          <li>Reject as cheaply as she approves</li>
+          <li>Know what happens to an account after a no</li>
+          <li>Keep working accounts one day a week; the eye is the job</li>
+        </ul>
+      </div>
+      <div class="cell">
+        <h3>Frustrations</h3>
+        <ul>
+          <li>Drafts read fluent and confident whether right or wrong</li>
+          <li>The queue rewards speed; thoroughness is invisible</li>
+          <li>Freight-line accounts are wrong in a way she can predict</li>
+          <li>A screen that shows the answer trains her to agree with it</li>
+        </ul>
+      </div>
+      <div class="cell">
+        <h3>What she knows that no system holds</h3>
+        <ul>
+          <li>Which late payers are certain and which are becoming a problem</li>
+          <li>Names from the trade press, hallways, and nineteen years of calls</li>
+          <li>When the written policy is wrong for this account, this month</li>
+        </ul>
+      </div>
+      <div class="cell">
+        <h3>Designs this card produced</h3>
+        <ul>
+          <li>The strongest-objection slot on the approval screen</li>
+          <li>"Routes to R. Vaughn, typically same day" under the reject control</li>
+          <li>Reject reasons as a fixed list, feeding the eval set</li>
+        </ul>
+      </div>
+    </div>
+    <div class="margin">
+      <label>MARGIN · D. OKAFOR</label>
+      <p>Her old job was deciding. Her new job is catching us deciding badly, and the
+      screen either serves that or performs it.</p>
+    </div>
+  </div>
+
+  <!-- ============ CARD 2 · the affected person ============ -->
+  <div class="sheet">
+    <div class="formbar"><span>PERSONA RECORD · FORM PD-2</span><span class="fill"></span><span>CARD 3 OF 3</span></div>
+    <div class="head">
+      <div class="portrait void"><span>NO PHOTO<br>EXISTS</span></div>
+      <div class="who">
+        <h2>Name not known to any Ostermill system</h2>
+        <span class="role ghost">THE AFFECTED PERSON</span>
+        <div class="meta">SOMEWHERE IN THE 14,000 ACCOUNTS<br>NEVER A USER</div>
+      </div>
+    </div>
+    <div class="quote empty">
+      <label>IN HER WORDS</label>
+      <p>No quote. She cannot be interviewed, because she does not know she is in this
+      population until the moment something goes wrong about her.</p>
+    </div>
+    <div class="facts">
+      <div><b>0</b><span>sessions</span></div>
+      <div><b>0</b><span>logins</span></div>
+      <div><b>0</b><span>surveys she will ever receive</span></div>
+      <div><b>100%</b><span>of the error rate lands here</span></div>
+    </div>
+    <div class="grid">
+      <div class="cell">
+        <h3>Goals</h3>
+        <div class="stamp">NOT ELICITED</div>
+        <div class="why">She never opted in, so no consent was given and none can be
+        withdrawn.</div>
+      </div>
+      <div class="cell">
+        <h3>Frustrations</h3>
+        <ul>
+          <li>A reminder, correctly worded, days after a funeral</li>
+          <li>She cannot tell a policy from a mistake</li>
+          <li>She does not experience a retrieval gap. She experiences a company that sent it</li>
+        </ul>
+      </div>
+      <div class="cell">
+        <h3>Journey map</h3>
+        <div class="stamp">NONE EXISTS</div>
+        <div class="why">Her only interaction with Ostermill's receivables process is the
+        one that goes wrong, and it is one hundred percent of her experience of this
+        company.</div>
+      </div>
+      <div class="cell">
+        <h3>What the method can still do</h3>
+        <ul>
+          <li>A named owner of her outcomes: M. Ellery, in advance</li>
+          <li>Cases in the graded set chosen because she is who gets hurt</li>
+          <li>A decision about her that can be reconstructed, in words a person can stand behind</li>
+        </ul>
+      </div>
+    </div>
+    <div class="margin hot">
+      <label>MARGIN · D. OKAFOR</label>
+      <span class="flag">ADDED AUGUST</span>
+      <p>In May this card was a method exercise. On 21 July it acquired a name, an invoice
+      for $410, and a date. This page stopped being hypothetical. See the incident file.</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="chrome">
+  <span class="tagno">CF-014</span>
+  <span>Designed composite · design-phase evidence cards</span>
+  <span class="fill"></span>
+  <nav><a href="index-v3.html">OSTERMILL</a><a href="case-file.html">CASE FILE</a><span class="cur">PEOPLE</span><a href="calendar.html">CALENDAR</a><a href="project-plan.html">PLAN</a><a href="prototypes.html">PROTOTYPES</a><a href="exhibits.html">EXHIBITS</a><a href="agent.html">AGENT</a><a href="eval-simulator.html">EVAL</a></nav>
+</div>
+
+</body>
+</html>

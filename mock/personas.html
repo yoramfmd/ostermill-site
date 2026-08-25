@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The people · Personnel files · Ostermill</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700&family=Archivo+Black&family=IBM+Plex+Mono:wght@400;600&family=Caveat:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:#14171A; --accent:#E8AE00; --green:#1E4D3B; --red:#B3261E;
+    --line:#DDDFE2; --gray:#F4F5F6; --field:#EFF1F2; --text:#23272C; --muted:#5F6870;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--gray); font-family:'Archivo',Arial,sans-serif; color:var(--text); padding:30px 20px 96px; }
+
+  .filehead { max-width:880px; margin:0 auto 22px; }
+  .filehead .tab { display:inline-block; background:var(--ink); color:#fff; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:2px; padding:5px 12px; }
+  .filehead h1 { font-family:'Archivo Black',sans-serif; text-transform:uppercase; font-size:24px; color:var(--ink); margin-top:12px; }
+  .filehead h1::after { content:""; display:block; width:56px; height:4px; background:var(--accent); margin-top:8px; }
+  .filehead p { font-size:13.5px; color:var(--muted); margin-top:10px; max-width:74ch; line-height:1.55; }
+
+  /* the drawer: five-slot ledger nav (adopted from design candidate) */
+  .drawer { max-width:880px; margin:0 auto 18px; display:flex; border:2px solid var(--ink); background:#fff; }
+  .drawer a { flex:1; padding:8px 10px; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:1px; color:var(--muted); text-decoration:none; border-right:1.5px solid var(--ink); }
+  .drawer a:last-child { border-right:none; }
+  .drawer a b { display:block; color:var(--ink); font-size:11px; }
+  .drawer a:hover { background:var(--field); }
+  .drawer a .n { color:var(--accent); font-weight:600; }
+
+  .sheet { max-width:880px; margin:0 auto 34px; background:#fff; border:3px solid var(--ink); }
+  .formbar { background:var(--ink); color:#fff; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:1.5px; display:flex; padding:7px 14px; }
+  .formbar .fill { flex:1; }
+  .dayone { background:var(--field); border-bottom:1.5px solid var(--ink); font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:1.5px; color:var(--muted); padding:5px 14px; }
+
+  .head { display:flex; gap:18px; padding:18px 18px 14px; border-bottom:3px solid var(--ink); align-items:flex-start; }
+  .portrait { width:104px; height:126px; border:2px solid var(--ink); background:var(--gray); flex-shrink:0; overflow:hidden; }
+  .portrait img { width:100%; height:100%; object-fit:cover; object-position:center top; display:block; }
+  .who h2 { font-family:'Archivo Black',sans-serif; font-size:22px; text-transform:uppercase; color:var(--ink); line-height:1.1; }
+  .who .role { display:inline-block; margin-top:7px; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:1.5px; padding:3px 8px; background:var(--accent); color:var(--ink); font-weight:600; }
+  .who .meta { font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--muted); margin-top:8px; line-height:1.7; }
+
+  .cols { display:grid; grid-template-columns:1.6fr 1fr; }
+  @media (max-width:720px){ .cols { grid-template-columns:1fr; } }
+  .main { padding:14px 18px 16px; border-right:1.5px solid var(--ink); }
+  @media (max-width:720px){ .main { border-right:none; border-bottom:1.5px solid var(--ink); } }
+  .main h3 { font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:2px; color:var(--ink); margin:12px 0 6px; font-weight:600; }
+  .main h3:first-child { margin-top:0; }
+  .main p { font-size:13px; line-height:1.62; max-width:58ch; }
+  .quote { border:2px solid var(--ink); padding:12px 14px; margin:14px 0 4px; }
+  .quote p { font-family:'Archivo Black',sans-serif; font-size:15px; line-height:1.35; color:var(--ink); max-width:100%; }
+  .quote label { display:block; font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:2px; color:var(--muted); margin-top:8px; }
+
+  .side { padding:14px 16px 16px; }
+  .side h3 { font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:2px; color:var(--ink); margin:12px 0 7px; font-weight:600; }
+  .side h3:first-child { margin-top:0; }
+  .fd { font-family:'IBM Plex Mono',monospace; font-size:10.5px; line-height:1.9; }
+  .fd dt { color:var(--muted); float:left; clear:left; width:52%; }
+  .fd dd { margin-left:54%; color:var(--text); }
+  .stamp { display:inline-block; font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:10px; letter-spacing:2px; color:var(--green); border:2px solid var(--green); padding:2px 8px; transform:rotate(-5deg); opacity:0.75; margin-top:2px; }
+  .rules { list-style:none; }
+  .rules li { font-size:12px; line-height:1.5; margin-bottom:7px; padding-left:13px; position:relative; }
+  .rules li::before { content:"▪"; position:absolute; left:0; top:0; color:var(--accent); font-size:10px; }
+
+  .margin { padding:11px 18px 14px; background:var(--field); border-top:1.5px solid var(--ink); }
+  .margin label { display:block; font-family:'IBM Plex Mono',monospace; font-size:9px; letter-spacing:2px; color:var(--muted); margin-bottom:2px; }
+  .margin p { font-family:'Caveat',cursive; font-size:18px; line-height:1.3; color:#3A4148; }
+
+  .chrome { position:fixed; bottom:0; left:0; right:0; background:var(--ink); color:#D6DADD; font-family:'IBM Plex Mono',monospace; font-size:11.5px; display:flex; align-items:center; gap:14px; padding:9px 16px; z-index:20; }
+  .chrome .tagno { background:var(--accent); color:var(--ink); font-weight:600; padding:3px 8px; }
+  .chrome .sep { color:#4A525A; }
+  .chrome a { color:#fff; }
+  .chrome .fill { flex:1; }
+  .chrome { flex-wrap:wrap; }
+  .chrome nav { display:flex; gap:11px; flex-wrap:wrap; }
+  .chrome nav a { text-decoration:none; }
+  .chrome nav a:hover { color:var(--accent); }
+  .chrome nav .cur { color:var(--accent); font-weight:600; }
+
+  svg.draw * { vector-effect:non-scaling-stroke; }
+</style>
+</head>
+<body>
+
+<div class="filehead">
+  <span class="tab">THE CASE FILE · THE PEOPLE · PERSONNEL FILES</span>
+  <h1>Five people, on day one</h1>
+  <p>Who they were before the project, introduced the way their own company would file
+  them. What the project did to each of them is not on these sheets; it is in the dated
+  artifacts, where it belongs.</p>
+</div>
+
+<div class="drawer">
+  <a href="#ruth-vaughn"><span class="n">01</span><b>Ruth Vaughn</b>SR. AR CLERK</a>
+  <a href="#dana-okafor"><span class="n">02</span><b>Dana Okafor</b>PRODUCT MANAGER</a>
+  <a href="#marcus-ellery"><span class="n">03</span><b>Marcus Ellery</b>CONTROLLER</a>
+  <a href="#priya-nair"><span class="n">04</span><b>Priya Nair</b>ARCHITECT</a>
+  <a href="#tom-brindle"><span class="n">05</span><b>Tom Brindle</b>VP SALES</a>
+</div>
+
+<!-- ============ 01 RUTH ============ -->
+<div class="sheet" id="ruth-vaughn">
+  <div class="formbar"><span>PERSONNEL FILE · FORM HR-1</span><span class="fill"></span><span>SHEET 01/05</span></div>
+  <div class="dayone">DAY-ONE INTRODUCTION · NO PROJECT RECORD ATTACHED</div>
+  <div class="head">
+    <div class="portrait">
+      <img src="assets/portrait-ruth-vaughn.png" alt="Portrait of Ruth Vaughn (drawing)">
+    </div>
+    <div class="who">
+      <h2>Ruth Vaughn</h2>
+      <span class="role">SENIOR ACCOUNTS-RECEIVABLE CLERK</span>
+      <div class="meta">FINANCE · COLUMBUS, SECOND FLOOR<br>22 YEARS AT OSTERMILL</div>
+    </div>
+  </div>
+  <div class="cols">
+    <div class="main">
+      <h3>01 · WHO SHE IS</h3>
+      <p>Twenty-two years at Ostermill, all of them in accounts receivable. Ruth is the
+      company's institutional judgment about who pays, who is struggling, and which
+      late payer is becoming a problem. She knows accounts by name, not number, and can
+      usually tell you why an invoice is late before anyone pulls a report.</p>
+      <h3>02 · HOW SHE WORKS</h3>
+      <p>Four days a week she works the collections queue; the fifth she works
+      accounts: the calls, the histories, the judgment work. Her method is memory plus
+      attention. She reads payment behavior the way a mechanic listens to an engine.</p>
+      <div class="quote">
+        <p>"The report tells you who's late. I can tell you who's in trouble. Those are
+        different lists."</p>
+        <label>IN HER OWN WORDS · INTAKE CONVERSATION</label>
+      </div>
+    </div>
+    <div class="side">
+      <h3>FILE DATA</h3>
+      <dl class="fd">
+        <dt>JOINED</dt><dd>22 years ago</dd>
+        <dt>DEPARTMENT</dt><dd>Finance · AR (5)</dd>
+        <dt>QUEUE DAYS</dt><dd>Mon–Thu</dd>
+        <dt>ACCOUNT DAY</dt><dd>Friday</dd>
+      </dl>
+      <h3>PRIOR EMPLOYERS</h3>
+      <span class="stamp">NOT ELICITED</span>
+      <h3>HOW TO WORK WITH HER</h3>
+      <ul class="rules">
+        <li>Bring her the exception, not the report. She has read the report.</li>
+        <li>Refer to accounts by name. A number gets you a colder answer.</li>
+        <li>Ask why before asking how fast. The why is where her value is.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="margin"><label>MARGIN</label><p>If the file disagrees with Ruth, check the file twice. — D.O.</p></div>
+</div>
+
+<!-- ============ 02 DANA ============ -->
+<div class="sheet" id="dana-okafor">
+  <div class="formbar"><span>PERSONNEL FILE · FORM HR-1</span><span class="fill"></span><span>SHEET 02/05</span></div>
+  <div class="dayone">DAY-ONE INTRODUCTION · NO PROJECT RECORD ATTACHED</div>
+  <div class="head">
+    <div class="portrait">
+      <img src="assets/portrait-dana-okafor.png" alt="Portrait of Dana Okafor (drawing)">
+    </div>
+    <div class="who">
+      <h2>Dana Okafor</h2>
+      <span class="role">PRODUCT MANAGER</span>
+      <div class="meta">OPERATIONS · COLUMBUS, THIRD FLOOR<br>HIRED THIS YEAR</div>
+    </div>
+  </div>
+  <div class="cols">
+    <div class="main">
+      <h3>01 · WHO SHE IS</h3>
+      <p>The company's first product manager, hired into operations rather than IT,
+      which was deliberate. New enough to ask why; senior enough to be answered. She
+      runs on documents: if a decision matters, she wants it dated, owned, and signed,
+      because she has watched what happens to decisions that live in memory.</p>
+      <h3>02 · HOW SHE WORKS</h3>
+      <p>Writes first, meets second. Her previous employer built a triage tool that ran
+      for eighteen months on a roadmap whose second phase was never staffed; she left
+      with a permanent allergy to plans that describe work nobody is doing. Paperwork,
+      for her, is not bureaucracy. It is memory that survives people.</p>
+      <div class="quote">
+        <p>"If it isn't written down, it was never decided. It was just agreed to."</p>
+        <label>IN HER OWN WORDS · INTAKE CONVERSATION</label>
+      </div>
+    </div>
+    <div class="side">
+      <h3>FILE DATA</h3>
+      <dl class="fd">
+        <dt>JOINED</dt><dd>this year</dd>
+        <dt>DEPARTMENT</dt><dd>Operations</dd>
+        <dt>REPORTS TO</dt><dd>VP Operations</dd>
+        <dt>INSTRUMENT</dt><dd>the decision log</dd>
+      </dl>
+      <h3>PRIOR EMPLOYERS</h3>
+      <dl class="fd"><dt>LAST ROLE</dt><dd>PM, a triage-software firm</dd></dl>
+      <h3>HOW TO WORK WITH HER</h3>
+      <ul class="rules">
+        <li>Bring a written question; you will get a written answer.</li>
+        <li>Disagree in the document, not after the meeting.</li>
+        <li>If she asks "who owns this," she is not being difficult. Yet.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="margin"><label>MARGIN</label><p>Declined to annotate her own sheet. "Writing your own margin is how roadmaps happen." — filed as said</p></div>
+</div>
+
+<!-- ============ 03 MARCUS ============ -->
+<div class="sheet" id="marcus-ellery">
+  <div class="formbar"><span>PERSONNEL FILE · FORM HR-1</span><span class="fill"></span><span>SHEET 03/05</span></div>
+  <div class="dayone">DAY-ONE INTRODUCTION · NO PROJECT RECORD ATTACHED</div>
+  <div class="head">
+    <div class="portrait">
+      <img src="assets/portrait-marcus-ellery.png" alt="Portrait of Marcus Ellery (drawing)">
+    </div>
+    <div class="who">
+      <h2>Marcus Ellery</h2>
+      <span class="role">CONTROLLER</span>
+      <div class="meta">FINANCE · COLUMBUS, SECOND FLOOR<br>OWNS THE NUMBER</div>
+    </div>
+  </div>
+  <div class="cols">
+    <div class="main">
+      <h3>01 · WHO HE IS</h3>
+      <p>The controller, which at Ostermill means the person who signs for the number
+      and answers for it when it is wrong. Skeptical in the productive way: he does not
+      distrust new things, he distrusts unmeasured ones, and he treats the difference
+      as his job description.</p>
+      <h3>02 · HOW HE WORKS</h3>
+      <p>Conditions before results. He wants the threshold written before the
+      experiment runs, because a number agreed after the fact is a negotiation, not a
+      measurement. Slow to enthuse, fast to fund anything that arrives with its own
+      failure condition attached.</p>
+      <div class="quote">
+        <p>"Tell me what would change your mind before you show me the result. After
+        that, it's bargaining."</p>
+        <label>IN HIS OWN WORDS · INTAKE CONVERSATION</label>
+      </div>
+    </div>
+    <div class="side">
+      <h3>FILE DATA</h3>
+      <dl class="fd">
+        <dt>DEPARTMENT</dt><dd>Finance</dd>
+        <dt>SIGNS</dt><dd>the credit line</dd>
+        <dt>CADENCE</dt><dd>monthly ops review</dd>
+        <dt>DESK</dt><dd>door usually open</dd>
+      </dl>
+      <h3>PRIOR EMPLOYERS</h3>
+      <span class="stamp">NOT ELICITED</span>
+      <h3>HOW TO WORK WITH HIM</h3>
+      <ul class="rules">
+        <li>Arrive with the failure condition, not just the plan.</li>
+        <li>Never annualize a number he has not seen measured.</li>
+        <li>His no usually contains instructions for getting to yes. Listen for them.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="margin"><label>MARGIN</label><p>The most useful skeptic in the building. Do not schedule him last. — D.O.</p></div>
+</div>
+
+<!-- ============ 04 PRIYA ============ -->
+<div class="sheet" id="priya-nair">
+  <div class="formbar"><span>PERSONNEL FILE · FORM HR-1</span><span class="fill"></span><span>SHEET 04/05</span></div>
+  <div class="dayone">DAY-ONE INTRODUCTION · NO PROJECT RECORD ATTACHED</div>
+  <div class="head">
+    <div class="portrait">
+      <img src="assets/portrait-priya-nair.png" alt="Portrait of Priya Nair (drawing)">
+    </div>
+    <div class="who">
+      <h2>Priya Nair</h2>
+      <span class="role">ARCHITECT</span>
+      <div class="meta">IT · COLUMBUS, THIRD FLOOR<br>THE 2014 ERP REBUILD, SURVIVED</div>
+    </div>
+  </div>
+  <div class="cols">
+    <div class="main">
+      <h3>01 · WHO SHE IS</h3>
+      <p>Ostermill's architect, which in a 640-person company means she is also its
+      review board, its standards committee, and its institutional memory of why the
+      last integration is shaped the way it is. She carried the 2014 ERP migration and
+      has the scar tissue to prove it.</p>
+      <h3>02 · HOW SHE WORKS</h3>
+      <p>She answers questions by building the smallest thing that settles them, and
+      she distrusts any signal nobody is paid to maintain. Boundaries are her love
+      language: she would rather enforce a narrow promise than gesture at a wide one.</p>
+      <div class="quote">
+        <p>"Anything can be built in four hours. Whether it should run is the
+        expensive question."</p>
+        <label>IN HER OWN WORDS · INTAKE CONVERSATION</label>
+      </div>
+    </div>
+    <div class="side">
+      <h3>FILE DATA</h3>
+      <dl class="fd">
+        <dt>DEPARTMENT</dt><dd>IT (14)</dd>
+        <dt>TENURE</dt><dd>since before 2014</dd>
+        <dt>OWNS</dt><dd>the platform line</dd>
+        <dt>METHOD</dt><dd>smallest thing first</dd>
+      </dl>
+      <h3>PRIOR EMPLOYERS</h3>
+      <span class="stamp">NOT ELICITED</span>
+      <h3>HOW TO WORK WITH HER</h3>
+      <ul class="rules">
+        <li>Ask for the boundary, not the feature. The feature follows.</li>
+        <li>If she says a signal is stale, believe her the first time.</li>
+        <li>Give her a question she can settle with a build by Friday.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="margin"><label>MARGIN</label><p>Argues against her own designs when the evidence turns. Rarer than it should be. — D.O.</p></div>
+</div>
+
+<!-- ============ 05 TOM ============ -->
+<div class="sheet" id="tom-brindle">
+  <div class="formbar"><span>PERSONNEL FILE · FORM HR-1</span><span class="fill"></span><span>SHEET 05/05</span></div>
+  <div class="dayone">DAY-ONE INTRODUCTION · NO PROJECT RECORD ATTACHED</div>
+  <div class="head">
+    <div class="portrait">
+      <img src="assets/portrait-tom-brindle.png" alt="Portrait of Tom Brindle (drawing)">
+    </div>
+    <div class="who">
+      <h2>Tom Brindle</h2>
+      <span class="role">VP SALES</span>
+      <div class="meta">SALES · ON THE ROAD, MOSTLY<br>KNOWS THE TOP 40 BY FIRST NAME</div>
+    </div>
+  </div>
+  <div class="cols">
+    <div class="main">
+      <h3>01 · WHO HE IS</h3>
+      <p>Runs sales the way Ostermill has always sold: by relationship, by counter, by
+      showing up. Every customer contact is a relationship to him, which makes him the
+      honest countervailing force in any room that wants to automate one. When he
+      objects, it is usually on behalf of somebody specific.</p>
+      <h3>02 · HOW HE WORKS</h3>
+      <p>Enthusiastic early, protective late. He will champion a new idea in February
+      and defend a customer against it in March, and he sees no contradiction, because
+      there isn't one. His numbers live in his head and his head is usually right,
+      which is both the asset and the problem.</p>
+      <div class="quote">
+        <p>"Every reminder we send lands on a relationship somebody here spent years
+        building. Usually me."</p>
+        <label>IN HIS OWN WORDS · INTAKE CONVERSATION</label>
+      </div>
+    </div>
+    <div class="side">
+      <h3>FILE DATA</h3>
+      <dl class="fd">
+        <dt>DEPARTMENT</dt><dd>Sales</dd>
+        <dt>TERRITORY</dt><dd>Ohio + 3 states</dd>
+        <dt>CARRIES</dt><dd>the top-40 list</dd>
+        <dt>BEST REACHED</dt><dd>in the car, 4–6 pm</dd>
+      </dl>
+      <h3>PRIOR EMPLOYERS</h3>
+      <span class="stamp">NOT ELICITED</span>
+      <h3>HOW TO WORK WITH HIM</h3>
+      <ul class="rules">
+        <li>Name the customer, not the segment. He thinks in people.</li>
+        <li>If a process needs him to maintain something, say so out loud.</li>
+        <li>His objections are field data. Collect them like it.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="margin"><label>MARGIN</label><p>The countervailing force, and an honest one. When Tom is uneasy, check the accounts he's uneasy about. — D.O.</p></div>
+</div>
+
+<div class="chrome">
+  <span class="tagno">CF-011</span>
+  <span>Designed composite · portraits are drawings, deliberately</span>
+  <span class="fill"></span>
+  <nav><a href="index-v3.html">OSTERMILL</a><a href="case-file.html">CASE FILE</a><span class="cur">PEOPLE</span><a href="calendar.html">CALENDAR</a><a href="project-plan.html">PLAN</a><a href="prototypes.html">PROTOTYPES</a><a href="exhibits.html">EXHIBITS</a><a href="agent.html">AGENT</a><a href="eval-simulator.html">EVAL</a></nav>
+</div>
+
+</body>
+</html>

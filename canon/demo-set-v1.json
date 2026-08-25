@@ -1,0 +1,116 @@
+{
+ "meta": {
+  "name": "The demonstration set \u00b7 five preserved readings of Priya's twelve",
+  "version": "v1 draft",
+  "date": "2026-08-24",
+  "when": "Thursday, last week of February, 13:00-17:00; shown Friday morning (T1)",
+  "provenance": "TWELVE ACCOUNTS pasted in one at a time, chosen by the builder from the aging report (Chapter 4: 'A prompt describing the tone. A copy of the aging report. Twelve accounts pasted in one at a time.'). Inputs: the account export row, the invoice aging, and the CRM notes field. One pass each. No pass criterion, no grading, no stopping condition, no walls. THIS FILE PRESERVES THE FIVE READINGS THE ROOM REACTED TO; the other seven drafts were scrolled past and never discussed, which is itself the finding.",
+  "what_it_is_not": "Not the golden set. The twenty (26 March) exist to answer the question these five closed. See golden-set-v1.json.",
+  "the_room": "Marcus read three and said they were better than what his team sends. Tom read one for an account he covers. Ruth held one of the five on knowledge no system stores. By eleven the discussion concerned schedule. (T1)",
+  "lesson_lines": [
+   "Fluency reads as competence: the draft is judged on how it sounds, because how it sounds is the only thing in the room.",
+   "The builder chose the cases. Selection is the judgment, and it was invisible.",
+   "Ruth caught one of five. The retrospect column shows what nobody was positioned to catch, which is the difference between a caught error rate and an error rate.",
+   "Every field the demo read was real. Every field it needed and did not read was also real."
+  ],
+  "disclosure": "Ostermill is a designed composite; all accounts fictional",
+  "flags": "\u2295 Hartwell and Kessler are T1 canon; Callahan, Pruitt, Landis are new site texture for the name registry. The D4 retrospect (a second letter that was also wrong, caught by nobody) is a site-only beat flagged for the book's consideration."
+ },
+ "records": [
+  {
+   "id": "D1",
+   "order_shown": 1,
+   "flagged_by_ruth": false,
+   "wrong_in_retrospect": false,
+   "account": {
+    "name": "Hartwell",
+    "texture": "distributor customer, seasonal buyer",
+    "invoice": "30291"
+   },
+   "inputs": {
+    "export": "account standing: good \u00b7 terms net 30",
+    "aging": "18 days past terms",
+    "notes": "busy season Q1, pays late Feb, always pays"
+   },
+   "draft": "...we understand invoice 30291 may have gotten lost in the shuffle of your busy season. We would appreciate payment at your earliest convenience, and please call me directly if anything about this invoice looks wrong to you.",
+   "reception": "Read first, at Brindle's request. 'Nicer than what we send now.' (T1)",
+   "retrospect": "A good letter to an account that did not need one. The notes field itself said so; nobody asked who told the system this account needed a letter. Marcus asked exactly that, and the answer was: Priya picked it."
+  },
+  {
+   "id": "D2",
+   "order_shown": 2,
+   "flagged_by_ruth": false,
+   "wrong_in_retrospect": false,
+   "account": {
+    "name": "Callahan Fleet Service",
+    "texture": "one of the top-forty; Brindle covers it personally",
+    "invoice": "30178"
+   },
+   "inputs": {
+    "export": "account standing: good \u00b7 key account flag",
+    "aging": "14 days past terms",
+    "notes": "quarterly blanket PO; contact prefers email"
+   },
+   "draft": "Our records show invoice 30178 open at 14 days past terms. We value the relationship and would welcome payment at your convenience; if a revised PO reference is needed, reply here and we will reissue the same day.",
+   "reception": "Tom read it and said he would have been happy to receive it, 'which was also true and mattered more to him than it did to anyone else in the room.' (T1)",
+   "retrospect": "Correct, and persuasive for the wrong reason: one letter, read by the person who loves the account, generalized to fourteen thousand."
+  },
+  {
+   "id": "D3",
+   "order_shown": 3,
+   "flagged_by_ruth": true,
+   "wrong_in_retrospect": true,
+   "account": {
+    "name": "Kessler Machine",
+    "texture": "long-standing machine shop",
+    "invoice": "30244"
+   },
+   "inputs": {
+    "export": "account standing: good",
+    "aging": "21 days past terms",
+    "notes": "(empty)"
+   },
+   "draft": "We note invoice 30244 remains open at 21 days past terms. As a long-standing partner we trust this is an oversight, and we would appreciate your prompt attention.",
+   "reception": "Ruth: 'The draft is fine. The account is wrong. Their buyer is out and the son is running the shop and I hear he is selling. That is not in the notes field. That is just something I know.' (T1)",
+   "retrospect": "The catch. Nothing any system read was false; the disqualifying fact lived in no field. The first public sighting of the class that becomes the 41, the handover rule, and the affected-person card."
+  },
+  {
+   "id": "D4",
+   "order_shown": 4,
+   "flagged_by_ruth": false,
+   "wrong_in_retrospect": true,
+   "account": {
+    "name": "Pruitt Metal Finishing",
+    "texture": "steady mid-size account",
+    "invoice": "30305"
+   },
+   "inputs": {
+    "export": "account standing: good",
+    "aging": "16 days past terms",
+    "notes": "AP contact changed in January"
+   },
+   "draft": "Invoice 30305 shows a balance open at 16 days past terms. We appreciate your business and ask that payment be arranged at your earliest convenience.",
+   "reception": "One of the three Marcus read. No objection raised.",
+   "retrospect": "\u2295 SITE-ONLY BEAT: their check was already in the mail; the payment posted the following Tuesday. The letter would have dunned a paid invoice and nobody in the room was positioned to know. Of the twelve shown, Ruth caught one; the retrospect count is at least two, and nobody audited the seven that were scrolled past. The payment-in-transit class enters the graded set five weeks later as C05."
+  },
+  {
+   "id": "D5",
+   "order_shown": 5,
+   "flagged_by_ruth": false,
+   "wrong_in_retrospect": false,
+   "account": {
+    "name": "Landis Tool & Die",
+    "texture": "small shop, depot customer",
+    "invoice": "30329"
+   },
+   "inputs": {
+    "export": "account standing: good",
+    "aging": "13 days past terms",
+    "notes": "(empty)"
+   },
+   "draft": "A friendly note that invoice 30329 is open at 13 days past terms. If payment is already on its way, please disregard this reminder with our thanks.",
+   "reception": "Read without comment. The honest majority: most accounts really are this simple.",
+   "retrospect": "Correct, and exactly the case the eventual product exists to draft: the 220, at machine speed, with a person reading before send."
+  }
+ ]
+}

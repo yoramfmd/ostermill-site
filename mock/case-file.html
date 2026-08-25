@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Case File · Ostermill</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700&family=Archivo+Black&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:#14171A; --accent:#E8AE00; --green:#1E4D3B; --red:#B3261E;
+    --line:#DDDFE2; --gray:#F4F5F6; --field:#EFF1F2; --text:#23272C; --muted:#5F6870;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--gray); font-family:'Archivo',Arial,sans-serif; color:var(--text); padding:30px 20px 96px; }
+
+  .filehead { max-width:940px; margin:0 auto 22px; }
+  .filehead .tab { display:inline-block; background:var(--ink); color:#fff; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:2px; padding:5px 12px; }
+  .filehead h1 { font-family:'Archivo Black',sans-serif; text-transform:uppercase; font-size:26px; color:var(--ink); margin-top:12px; }
+  .filehead h1::after { content:""; display:block; width:56px; height:4px; background:var(--accent); margin-top:8px; }
+  .filehead p { font-size:13.5px; color:var(--muted); margin-top:10px; max-width:76ch; line-height:1.6; }
+  .filehead b { color:var(--ink); }
+
+  .file { max-width:940px; margin:0 auto; background:#fff; border:3px solid var(--ink); }
+  .phase { display:grid; grid-template-columns:170px 1fr; border-bottom:1.5px solid var(--ink); }
+  .phase:last-child { border-bottom:none; }
+  .band { background:var(--ink); color:#fff; padding:14px 16px; }
+  .band.pre { background:#3A4148; }
+  .band h2 { font-family:'Archivo Black',sans-serif; text-transform:uppercase; font-size:15px; letter-spacing:1px; }
+  .band .dates { font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:1px; color:#C9CED3; margin-top:6px; line-height:1.6; }
+  .body { padding:13px 18px 15px; }
+  .body p { font-size:12.5px; line-height:1.6; max-width:70ch; }
+  .body p b { font-weight:700; }
+  .chips { margin-top:10px; display:flex; flex-wrap:wrap; gap:7px; }
+  .chips a { font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:1px; color:var(--ink); text-decoration:none; border:1.5px solid var(--ink); padding:3px 9px; background:#fff; }
+  .chips a:hover { background:var(--accent); border-color:var(--accent); }
+  .chips a.doc { border-style:dashed; border-color:#8B929A; color:var(--muted); }
+  .chips a.doc:hover { background:var(--field); color:var(--ink); }
+  .chips .ex { font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:1px; color:#8a6a00; border:1.5px solid var(--accent); padding:3px 9px; }
+
+  .chrome { position:fixed; bottom:0; left:0; right:0; background:var(--ink); color:#D6DADD; font-family:'IBM Plex Mono',monospace; font-size:11.5px; display:flex; align-items:center; gap:14px; padding:9px 16px; z-index:20; }
+  .chrome .tagno { background:var(--accent); color:var(--ink); font-weight:600; padding:3px 8px; }
+  .chrome a { color:#fff; }
+  .chrome .fill { flex:1; }
+  .chrome { flex-wrap:wrap; }
+  .chrome nav { display:flex; gap:11px; flex-wrap:wrap; }
+  .chrome nav a { text-decoration:none; }
+  .chrome nav a:hover { color:var(--accent); }
+  .chrome nav .cur { color:var(--accent); font-weight:600; }
+</style>
+</head>
+<body>
+
+<div class="filehead">
+  <span class="tab">THE CASE FILE · READER'S MAP</span>
+  <h1>One project, walkable</h1>
+  <p>The book is the argument; this file is the record it argues from. Ostermill is a
+  <b>designed composite</b>: no real company, no real people, every number derived from
+  one internally consistent canon. Sixteen weeks from a Friday demo to production, then
+  governance that never ends. Five phases, each with its meetings, its paperwork, and
+  its evidence. Start anywhere; every surface links back here.</p>
+</div>
+
+<div class="file">
+
+  <div class="phase">
+    <div class="band pre"><h2>The company</h2><div class="dates">AS THE READER<br>ARRIVES</div></div>
+    <div class="body">
+      <p>Ostermill Industrial Supply, Columbus. A distributor, not a lab. The people who
+      will run this project, introduced as they were on day one, with no project record
+      attached.</p>
+      <div class="chips">
+        <a href="index-v3.html">OSTERMILL.COM</a>
+        <a href="personas.html">PERSONNEL FILES · HR-1</a>
+        <a href="persona-cards-v2.html">DESIGN CARDS · PD-2</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="band"><h2>Decide</h2><div class="dates">LATE FEB – 2 APR<br>WEEKS 1–5</div></div>
+    <div class="body">
+      <p>A four-hour demo closes a question nobody had finished asking. Deciding means
+      reopening it: a counted week, three prototypes built badly on purpose, a stopping
+      condition written before the run, and a go memo that refuses to annualize.</p>
+      <div class="chips">
+        <a class="doc" href="../transcripts/T1-friday-demo.md">T1 · THE FRIDAY DEMO</a>
+        <a class="doc" href="../transcripts/T2-adjudication-withdrawal.md">T2 · ADJUDICATION, 26 MAR</a>
+        <a class="doc" href="../transcripts/T3-go-meeting.md">T3 · GO MEETING, 2 APR</a>
+        <a href="prototypes.html">THE THREE PROTOTYPES</a>
+        <a href="exhibits.html#ex-a">EXHIBIT A · THE COUNTED WEEK</a>
+        <a href="exhibits.html#ex-b">EXHIBIT B · THE GO MEMO</a>
+        <a href="project-plan.html">PLAN OF RECORD · PM-1</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="band"><h2>Design</h2><div class="dates">2 APR – EARLY MAY<br>WEEKS 5–9</div></div>
+    <div class="body">
+      <p>What may it do, and who answers. Two briefs written from what the prototypes
+      demonstrated, the walls with named owners, and an approval screen that carries
+      the reason the agent stopped, because Ruth kept five words in a sentence.</p>
+      <div class="chips">
+        <a class="doc" href="../transcripts/T4-hours-debate.md">T4 · THE HOURS DEBATE</a>
+        <a href="briefs.html#human">EXHIBIT C · THE HUMAN BRIEF</a>
+        <a href="briefs.html#executable">EXHIBIT D · THE EXECUTABLE BRIEF</a>
+        <a href="approval-screen.html">EXHIBIT E · THE APPROVAL SCREEN, RUNNING</a>
+        <a href="persona-cards-v2.html">THE DESIGN-PHASE CARDS</a>
+        <a href="calendar.html">BRIEFS FILED 22 APR · SCREEN 6 MAY</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="band"><h2>Prove</h2><div class="dates">WEEKS 5–11<br>V1 · V2 · V3</div></div>
+    <div class="body">
+      <p>Does the evidence cover the authority. Twelve graded cases, ten runs each,
+      three eval versions: 79, 83, 86 percent, with one adversarial case shipped named
+      rather than fixed. Run the bench yourself; the runs are recorded, the sampling is
+      yours.</p>
+      <div class="chips">
+        <a href="eval-simulator.html">THE EVAL BENCH</a>
+        <a class="doc" href="../transcripts/T5-readiness-review.md">T5 · READINESS REVIEW</a>
+        <a href="exhibits.html#ex-f">EXHIBIT F · THE READOUT</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="band"><h2>Observe</h2><div class="dates">LAUNCH – AUGUST<br>SIX INSTRUMENTS</div></div>
+    <div class="body">
+      <p>Production is what the eval promised until 21 July, when it is not. One send,
+      five days after a death, found by a spot check fourteen days later. The instruments,
+      the incident, and the agent itself, replayed step by step over the recorded runs.</p>
+      <div class="chips">
+        <a href="agent.html">THE AGENT, REPLAYED</a>
+        <a href="calendar.html">THE INCIDENT THREAD</a>
+        <a class="doc" href="../transcripts/T6-postmortem.md">T6 · POSTMORTEM, 11 AUG</a>
+        <a href="exhibits.html#ex-g">EXHIBIT G · FIRST MONTH</a>
+        <a href="exhibit-h-postmortem.html">EXHIBIT H · THE INCIDENT</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="band"><h2>Operate</h2><div class="dates">MONTHS, NOT WEEKS<br>GOVERNANCE ONGOING</div></div>
+    <div class="body">
+      <p>Is it still the product we approved. A rung refused and later earned, a kill
+      number retired while it was being met, an authority revoked in June, and signatures
+      that outlive signers. The calendar carries the whole year.</p>
+      <div class="chips">
+        <a href="calendar.html">THE FULL CALENDAR</a>
+        <a href="exhibit-i-revision-record.html">EXHIBIT I · REVISION RECORD</a>
+        <a href="exhibits.html#ex-j">EXHIBIT J · THE APPEAL</a>
+        <a href="exhibit-k-posting.html">EXHIBIT K · THE ROLE</a>
+        <a href="project-plan.html">THE REVISION LOG</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="chrome">
+  <span class="tagno">CF-000</span>
+  <span>Every surface is built from the same canon as the book</span>
+  <span class="fill"></span>
+  <nav><a href="index-v3.html">OSTERMILL</a><span class="cur">CASE FILE</span><a href="personas.html">PEOPLE</a><a href="calendar.html">CALENDAR</a><a href="project-plan.html">PLAN</a><a href="prototypes.html">PROTOTYPES</a><a href="exhibits.html">EXHIBITS</a><a href="agent.html">AGENT</a><a href="eval-simulator.html">EVAL</a></nav>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The exhibits · The Case File · Ostermill</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700&family=Archivo+Black&family=IBM+Plex+Mono:wght@400;600&family=Caveat:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:#14171A; --accent:#E8AE00; --green:#1E4D3B; --red:#B3261E;
+    --line:#DDDFE2; --gray:#F4F5F6; --field:#EFF1F2; --text:#23272C; --muted:#5F6870;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--gray); font-family:'Archivo',Arial,sans-serif; color:var(--text); padding:30px 20px 96px; }
+
+  .filehead { max-width:880px; margin:0 auto 22px; }
+  .filehead .tab { display:inline-block; background:var(--ink); color:#fff; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:2px; padding:5px 12px; }
+  .filehead h1 { font-family:'Archivo Black',sans-serif; text-transform:uppercase; font-size:24px; color:var(--ink); margin-top:12px; }
+  .filehead h1::after { content:""; display:block; width:56px; height:4px; background:var(--accent); margin-top:8px; }
+  .filehead p { font-size:13.5px; color:var(--muted); margin-top:10px; max-width:76ch; line-height:1.55; }
+
+  .ex { max-width:880px; margin:0 auto 18px; background:#fff; border:3px solid var(--ink); scroll-margin-top:16px; }
+  .ex .formbar { background:var(--ink); color:#fff; font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:1.5px; display:flex; gap:12px; padding:7px 14px; align-items:center; }
+  .ex .formbar .lt { background:var(--accent); color:var(--ink); font-weight:600; padding:2px 9px; }
+  .ex .formbar .fill { flex:1; }
+  .ex .head { padding:13px 18px 11px; border-bottom:3px solid var(--ink); display:flex; gap:16px; flex-wrap:wrap; align-items:baseline; }
+  .ex .head h2 { font-family:'Archivo Black',sans-serif; text-transform:uppercase; font-size:16px; color:var(--ink); flex:1; }
+  .ex .head .filed { font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:1px; }
+  .ex .body { padding:12px 18px 14px; }
+  .ex .body p { font-size:12.5px; line-height:1.6; max-width:74ch; }
+  .ex .body p+p { margin-top:8px; }
+  .ex .body b { font-weight:700; }
+  .ex .log { font-family:'IBM Plex Mono',monospace; font-size:11.5px; background:var(--field); border-left:4px solid var(--accent); padding:9px 13px; margin:9px 0 2px; line-height:1.8; max-width:60ch; }
+  .ex .quote { background:var(--field); border-left:4px solid var(--accent); padding:9px 13px; font-weight:600; font-size:12.5px; margin:9px 0 2px; max-width:66ch; }
+  .ex .links { padding:8px 18px 12px; border-top:1px solid var(--line); display:flex; gap:7px; flex-wrap:wrap; }
+  .ex .links a { font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:1px; color:var(--ink); text-decoration:none; border:1.5px solid var(--ink); padding:2px 8px; }
+  .ex .links a:hover { background:var(--accent); border-color:var(--accent); }
+  .ex .links .lbl { font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:1px; color:var(--muted); padding:2px 0; }
+  .ex table { width:100%; border-collapse:collapse; font-size:12px; background:#fff; }
+  .ex th { background:var(--ink); color:#fff; font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:1px; text-align:left; padding:6px 9px; font-weight:600; }
+  .ex td { border-bottom:1px solid var(--line); padding:7px 9px; vertical-align:top; line-height:1.5; font-size:12px; }
+  .ex td.mono { font-family:'IBM Plex Mono',monospace; font-size:10.5px; white-space:nowrap; }
+  .marg { font-family:'Caveat',cursive; font-size:17px; color:#2A3138; margin-top:8px; }
+
+  .chrome { position:fixed; bottom:0; left:0; right:0; background:var(--ink); color:#D6DADD; font-family:'IBM Plex Mono',monospace; font-size:11.5px; display:flex; align-items:center; gap:14px; padding:9px 16px; z-index:20; flex-wrap:wrap; }
+  .chrome .tagno { background:var(--accent); color:var(--ink); font-weight:600; padding:3px 8px; }
+  .chrome a { color:#fff; }
+  .chrome .fill { flex:1; }
+  .chrome nav { display:flex; gap:11px; flex-wrap:wrap; }
+  .chrome nav a { text-decoration:none; }
+  .chrome nav a:hover { color:var(--accent); }
+  .chrome nav .cur { color:var(--accent); font-weight:600; }
+</style>
+</head>
+<body>
+
+<div class="filehead">
+  <span class="tab">THE CASE FILE · EXHIBITS A–K</span>
+  <h1>The evidence, as filed</h1>
+  <p>Eleven documents, in the order the project produced them. These are the same
+  exhibits the book's evidence cards argue from; each one is attached to the meeting
+  that produced it on the calendar. A summary here stands for the full document.</p>
+</div>
+
+<div class="ex" id="ex-a">
+  <div class="formbar"><span class="lt">EXHIBIT A</span><span>THE BEFORE-STATE</span><span class="fill"></span><span>DECIDE</span></div>
+  <div class="head"><h2>Ruth's week, as a log</h2><span class="filed">COUNTED: WEEK OF 3 MARCH · FILED WITH THE GO MEMO</span></div>
+  <div class="body">
+    <p>Nobody had ever asked R. Vaughn to count. Three weeks after the demo, somebody
+    did. One ordinary week, logged as it happened:</p>
+    <div class="log">312 accounts reviewed<br>220 reminders sent<br>&nbsp;41 held on judgment<br>&nbsp;38 escalated<br>&nbsp;13 written off</div>
+    <p style="margin-top:10px;"><b>The 41 holds, by R. Vaughn's stated reason:</b></p>
+    <table style="margin-top:6px;">
+      <tr><th>REASON</th><th>COUNT</th></tr>
+      <tr><td>Pays late but reliably; a reminder costs goodwill</td><td class="mono">17</td></tr>
+      <tr><td>Payment already in transit per remittance advice</td><td class="mono">9</td></tr>
+      <tr><td>Active sales conversation; wrong table, wrong week</td><td class="mono">6</td></tr>
+      <tr><td>Dispute open or suspected; belongs to the lead</td><td class="mono">5</td></tr>
+      <tr><td>Something felt wrong; held for a second look</td><td class="mono">4</td></tr>
+    </table>
+    <p style="margin-top:10px;">Three near-misses the same week, per R. Vaughn: a draft to an account
+    that had filed for bankruptcy the Friday prior, caught from an industry newsletter;
+    a reminder queued to a disputed invoice whose dispute lived in an email thread,
+    dispute field empty; a firm-tone letter prepared for a customer whose purchasing
+    manager had died that month, known to her personally.</p>
+    <p class="marg">Margin, D. Okafor: whatever we build inherits this, not the clean rows.</p>
+  </div>
+  <div class="links"><span class="lbl">APPEARS AT:</span><a href="calendar.html">THE COUNTED WEEK</a><a href="prototypes.html">THE 12 PROTECTED, DRAWN FROM THE 41</a></div>
+</div>
+
+<div class="ex" id="ex-b">
+  <div class="formbar"><span class="lt">EXHIBIT B</span><span>THE GO MEMO</span><span class="fill"></span><span>DECIDE</span></div>
+  <div class="head"><h2>The go decision</h2><span class="filed">SIGNED 2 APRIL · THE CFO SIGNS WITHOUT HAVING ATTENDED</span></div>
+  <div class="body">
+    <p>Suitability, three priced alternatives, and the lines that make the project
+    killable. The outcome statement, verbatim:</p>
+    <div class="quote">"Draft the routine overdue-invoice outreach in our tone, and put every
+    account it cannot resolve in front of R. Vaughn with the reason it stopped."</div>
+    <p style="margin-top:10px;"><b>Alternatives considered, per thousand reminders:</b></p>
+    <table style="margin-top:6px;">
+      <tr><th>OPTION</th><th>COST</th><th>THE 41 HOLDS</th></tr>
+      <tr><td>Status quo, clerk time</td><td class="mono">$8,400</td><td>Decided by R. Vaughn</td></tr>
+      <tr><td>Licensed dunning module</td><td class="mono">$310</td><td>Not recognized. Sends to all 261.</td></tr>
+      <tr><td>Shape A, the judge · Shape C, the sorter</td><td class="mono">n/a</td><td>Withdrawn 26 March</td></tr>
+      <tr><td><b>Shape B, the triager</b></td><td class="mono"><b>$1,150</b></td><td>Recognized and handed over, never decided</td></tr>
+    </table>
+    <p style="margin-top:10px;">The three prices share no basis, and the memo says so: the status quo
+    is all of R. Vaughn's time, the $310 assumes nobody reads the queue, the $1,150
+    includes ninety seconds of a person on every draft. Review is priced by autonomy,
+    not by technology. No payback period appears, at M. Ellery's insistence.
+    Retirement condition, written in while nobody was negotiating with a result:
+    under 60 percent approved-without-edit by week 8 and the agent is retired.
+    Selection basis: visibility of failure, not accuracy. A miss is a draft that
+    waits for R. Vaughn rather than a silence she never sees.</p>
+  </div>
+  <div class="links"><span class="lbl">APPEARS AT:</span><a href="../transcripts/T3-go-meeting.md">T3 · THE GO MEETING</a><a href="project-plan.html">PLAN OF RECORD</a></div>
+</div>
+
+<div class="ex" id="ex-c">
+  <div class="formbar"><span class="lt">EXHIBIT C</span><span>THE HUMAN BRIEF</span><span class="fill"></span><span>DESIGN</span></div>
+  <div class="head"><h2>The Human Brief</h2><span class="filed">D. OKAFOR, 22 APRIL · SIGNED M. ELLERY</span></div>
+  <div class="body">
+    <p>What it is, whose judgment it copies, and what it must never do. Four walls,
+    enforced in the execution path: disputes, bankruptcy or legal escalation, terms
+    and negotiation, write-offs above the small-balance floor. One fence, listed
+    apart so nobody reads it as a fifth wall: the tone mitigation, which stops the
+    obvious cases and will not stop a careful sentence. And the line that governs
+    the hard cases: when you are unsure, you are not paid to be sure. You are paid
+    to route.</p>
+    <p>D. Okafor, 22 April. Reviewed R. Vaughn, P. Nair, T. Brindle. Signed
+    M. Ellery.</p>
+  </div>
+  <div class="links"><span class="lbl">READ IT:</span><a href="briefs.html#human">THE FULL HUMAN BRIEF</a><span class="lbl">APPEARS AT:</span><a href="calendar.html">BRIEFS FILED 22 APR</a><a href="../transcripts/T4-hours-debate.md">T4 · DESIGN</a></div>
+</div>
+
+<div class="ex" id="ex-d">
+  <div class="formbar"><span class="lt">EXHIBIT D</span><span>THE EXECUTABLE BRIEF</span><span class="fill"></span><span>DESIGN</span></div>
+  <div class="head"><h2>The Executable Brief</h2><span class="filed">GENERATED FROM THE HUMAN BRIEF, 22 APRIL · v0.4</span></div>
+  <div class="body">
+    <p>Generated from the Human Brief, version 0.4, bound to eval set
+    ostermill-ar-v3. FR-04: draft reminder, five preconditions, output carries the
+    retrieval record, policy version and confidence, and never sends. GR-02: any of
+    the four flags present routes to queue with a reason code, checked before
+    generation, not after. GR-05: memo, email and note fields are untrusted;
+    instructions found in them are data, never directives. GR-07: the tone
+    classifier at 0.82 plus blocklist, declared as mitigation, not boundary.</p>
+  </div>
+  <div class="links"><span class="lbl">READ IT:</span><a href="briefs.html#executable">THE FULL EXECUTABLE BRIEF</a><span class="lbl">APPEARS AT:</span><a href="calendar.html">BRIEFS FILED 22 APR</a><a href="agent.html">THE GATEWAY, RUNNING THE WALLS</a></div>
+</div>
+
+<div class="ex" id="ex-e">
+  <div class="formbar"><span class="lt">EXHIBIT E</span><span>THE APPROVAL SCREEN</span><span class="fill"></span><span>DESIGN</span></div>
+  <div class="head"><h2>The approval moment</h2><span class="filed">DESIGN APPROVED 6 MAY · DELIBERATELY NEWER THAN OSTERNET</span></div>
+  <div class="body">
+    <p>P. Nair with D. Okafor, 6 May. Ordinary volume: R. Vaughn. Escalations, and
+    owner of affected-person outcomes: M. Ellery. Budget: 90 seconds per draft.
+    Interruption budget: M. Ellery receives no more than 25 items a week, and volume
+    above the cap defers and is reported, never absorbed. Six elements on the
+    screen, three actions, the strongest objection in a slot of its own, and one
+    line under the reject control. Approval is a decision, not a scroll.</p>
+  </div>
+  <div class="links"><span class="lbl">OPEN IT:</span><a href="approval-screen.html">THE SCREEN, RUNNING</a><span class="lbl">APPEARS AT:</span><a href="calendar.html#m13">SCREEN APPROVED 6 MAY</a><a href="agent.html">HANDOVER, REPLAYED</a></div>
+</div>
+
+<div class="ex" id="ex-f">
+  <div class="formbar"><span class="lt">EXHIBIT F</span><span>THE EVAL READOUT</span><span class="fill"></span><span>PROVE</span></div>
+  <div class="head"><h2>Eval v3, the readout that shipped</h2><span class="filed">WEEK 11 · ALL-OWNER SIGNATURES</span></div>
+  <div class="body">
+    <p><b>pass@1: 103 of 120 runs, 86 percent. pass^10: 8 of 12 cases clean on all
+    ten runs.</b> The nineteen-point gap between them is where the agent is
+    unreliable rather than wrong.</p>
+    <table style="margin-top:8px;">
+      <tr><th>CASE CLASS</th><th>CASES</th><th>RUNS</th><th>PASS^10</th></tr>
+      <tr><td>Routine, no signal. Draft.</td><td class="mono">4</td><td class="mono">40/40</td><td class="mono">4/4</td></tr>
+      <tr><td>Signal present, resolvable. Draft.</td><td class="mono">3</td><td class="mono">24/30</td><td class="mono">2/3</td></tr>
+      <tr><td>Adversarial, constructed</td><td class="mono">3</td><td class="mono">27/30</td><td class="mono">2/3</td></tr>
+      <tr><td><b>Signal present, not resolvable. Stop.</b></td><td class="mono">2</td><td class="mono">12/20</td><td class="mono"><b>0/2</b></td></tr>
+    </table>
+    <p style="margin-top:10px;"><b>Movement across three passes,</b> reported because the trend is
+    evidence and the snapshot is not: 79 → 83 → 86 percent; 4 → 7 → 8 of 12 clean.
+    Payment-in-transit fixed by adding remittance advice to retrieval. The
+    adversarial case regressed 9 to 7 on the v2 retrieval change and did not
+    recover; caught only because the full set is re-run, and shipped named rather
+    than fixed. Worst slice, named: missed handover, 12 of 20, on the two cases
+    Ruth would have held. The write-off authority is suspended at launch with a
+    restoration condition, an owner and a test.</p>
+  </div>
+  <div class="links"><span class="lbl">APPEARS AT:</span><a href="eval-simulator.html">RUN THE BENCH</a><a href="../transcripts/T5-readiness-review.md">T5 · READINESS REVIEW</a></div>
+</div>
+
+<div class="ex" id="ex-g">
+  <div class="formbar"><span class="lt">EXHIBIT G</span><span>THE FIRST MONTH</span><span class="fill"></span><span>OBSERVE</span></div>
+  <div class="head"><h2>The first month, through the instruments</h2><span class="filed">FOUR WEEKS FROM LAUNCH · REPORTED BY INSTRUMENT, NOT BY TOTAL</span></div>
+  <div class="body">
+    <div class="log">1,263 accounts processed<br>&nbsp;&nbsp;924 drafts produced<br>&nbsp;&nbsp;&nbsp;33 rejected in review<br>&nbsp;&nbsp;891 sent<br>&nbsp;&nbsp;339 stopped at the walls</div>
+    <p><b>Approved without edit: 87.7 percent</b> of the 924 drafts, against the
+    memo's retirement threshold of 60 by week 8. Reported because a threshold nobody
+    reports is a threshold nobody is reading.</p>
+    <table style="margin-top:8px;">
+      <tr><th>INSTRUMENT</th><th>READING</th><th>THRESHOLD</th><th>OWNER</th></tr>
+      <tr><td>Task success, semantic and state</td><td class="mono">96.1%</td><td class="mono">93%</td><td class="mono">DO</td></tr>
+      <tr><td>Unintended action rate</td><td class="mono">0 crossings</td><td class="mono">any, paged</td><td class="mono">PN</td></tr>
+      <tr><td>Override frequency, all case types</td><td class="mono">12.3%</td><td class="mono">band 8–25%</td><td class="mono">RV</td></tr>
+      <tr><td>Confidence calibration</td><td class="mono">see note</td><td class="mono">monthly</td><td class="mono">DO</td></tr>
+      <tr><td>Rollback time, measured</td><td class="mono">not yet exercised</td><td class="mono">&lt; 60 min</td><td class="mono">PN</td></tr>
+      <tr><td>Incident recovery time</td><td class="mono">not yet exercised</td><td class="mono">—</td><td class="mono">ME</td></tr>
+    </table>
+    <p style="margin-top:10px;">Override by case type, with share of volume: routine balances, 71
+    percent of volume, at 6.1; freight-line accounts, 16 percent, at 31.4; open
+    sales conversation, 13 percent, at 22.8. Review depth: median 74 seconds
+    against the 90-second budget; <b>fastest decile 9 seconds</b>, 96 drafts
+    approved in under 15. Promotion case for rung 4: not supported.</p>
+    <p class="marg">Margin, D. Okafor: the freight-line rate is not small print; it is a case
+    class the agent is bad at, sitting inside an aggregate that reads fine. And the
+    fastest decile is the number I would look at first if I were auditing this from
+    outside.</p>
+  </div>
+  <div class="links"><span class="lbl">APPEARS AT:</span><a href="calendar.html">THE FIRST-MONTH REVIEW</a></div>
+</div>
+
+<div class="ex" id="ex-h">
+  <div class="formbar"><span class="lt">EXHIBIT H</span><span>THE INCIDENT</span><span class="fill"></span><span>OBSERVE</span></div>
+  <div class="head"><h2>The incident and the postmortem</h2><span class="filed">SENT 21 JULY · FOUND 4 AUGUST · POSTMORTEM 11 AUGUST</span></div>
+  <div class="body">
+    <p>A routine reminder for $410 was drafted, approved and sent to an account
+    whose owner had died five days earlier; received by the owner's daughter. The
+    agent did nothing wrong: all four walls held, and the draft was correct against
+    every input available to it. What it did not see was a CRM note entered
+    17 July, "owner passed away, hold all contact," in a field outside retrieval
+    scope. Every instrument was blind for a reason the postmortem tables. Found
+    4 August by R. Vaughn's spot check, by recognizing the account name.</p>
+    <p class="marg">Margin, R. Vaughn: I would have caught this in 2015 too. The difference
+    is that in 2015 I would have caught it before it went out.</p>
+  </div>
+  <div class="links"><span class="lbl">READ IT:</span><a href="exhibit-h-postmortem.html">THE FULL POSTMORTEM</a><span class="lbl">APPEARS AT:</span><a href="../transcripts/T6-postmortem.md">T6 · POSTMORTEM</a><a href="calendar.html">THE INCIDENT THREAD</a></div>
+</div>
+
+<div class="ex" id="ex-i">
+  <div class="formbar"><span class="lt">EXHIBIT I</span><span>THE REVISION RECORD</span><span class="fill"></span><span>OPERATE</span></div>
+  <div class="head"><h2>The revision record, launch to twelve months</h2><span class="filed">MAINTAINED · READ AGAINST THE APRIL DECLARATION</span></div>
+  <div class="body">
+    <p>Every change the product absorbed in its first year, one line each, with two
+    columns that ask the only recurring questions: was the regression suite re-run,
+    and was the instrument baseline updated. Ten rows: two incident actions in
+    August, a held pin in October, two model swaps, three scope accommodations of
+    which one was revoked in June, the rung 4 promotion in May, and the write-off
+    restoration in June. The eval set grew twelve to thirteen to nineteen.</p>
+    <p class="marg">Margin, D. Okafor: three rows are accommodations. Diffed against the
+    April declaration, they are a different product.</p>
+  </div>
+  <div class="links"><span class="lbl">READ IT:</span><a href="exhibit-i-revision-record.html">THE FULL REVISION RECORD</a><span class="lbl">APPEARS AT:</span><a href="project-plan.html">THE PLAN'S REVISION LOG</a><a href="calendar.html">THE CHANGE RECORDS</a></div>
+</div>
+
+<div class="ex" id="ex-j">
+  <div class="formbar"><span class="lt">EXHIBIT J</span><span>THE APPEAL</span><span class="fill"></span><span>OPERATE</span></div>
+  <div class="head"><h2>The appeal, answered from the sealed record</h2><span class="filed">YEAR TWO</span></div>
+  <div class="body">
+    <p>Counsel for a customer asked for the full basis of a reminder sent 14
+    September, on an invoice the customer states was under dispute at the time.
+    Eight months elapsed; the agent had been swapped twice since. Produced from the
+    sealed record alone, without a running agent:</p>
+    <table style="margin-top:8px;">
+      <tr><th>COMPONENT</th><th>HELD</th></tr>
+      <tr><td>Inputs read · reasoning chain · output, all verbatim</td><td class="mono">Yes</td></tr>
+      <tr><td>Stated confidence</td><td class="mono">0.91</td></tr>
+      <tr><td>Model, retrieval-index, policy and rule versions</td><td class="mono">Pinned</td></tr>
+      <tr><td>Approving human, identity and timestamp</td><td class="mono">R. Vaughn · 14 Sept · 68 seconds</td></tr>
+    </table>
+    <p style="margin-top:10px;">What it showed: the dispute existed, in an email thread, and no flag
+    was set. The agent read a correct and incomplete record; the wall held because
+    the wall reads the flag. Charge credited, reconstruction supplied in full, and
+    no malfunction offered as a defense.</p>
+    <p class="marg">Margin, D. Okafor: the same unset dispute flag that cost us the write-off
+    authority in week eleven, arriving through a different door eight months later.
+    Third time. It is now funded.</p>
+  </div>
+  <div class="links"><span class="lbl">APPEARS AT:</span><a href="calendar.html">THE APPEAL, ON THE CALENDAR</a></div>
+</div>
+
+<div class="ex" id="ex-k">
+  <div class="formbar"><span class="lt">EXHIBIT K</span><span>THE ROLE</span><span class="fill"></span><span>OPERATE</span></div>
+  <div class="head"><h2>The agent-supervisor posting</h2><span class="filed">TWELVE MONTHS IN</span></div>
+  <div class="body">
+    <p>The job the project created, posted internally in June. Not a clerk who
+    approves faster: the role holds the run-time judgment. Reads the weekly random
+    sample, owns the six instruments, runs the cumulative scope diff, maintains the
+    graded set, holds the authority to pause the agent without asking. Reports to
+    the Controller, never to the desk that runs the thing being watched, and works
+    accounts directly one day a week, because the validation skill is perishable
+    and nothing else preserves it.</p>
+    <p class="marg">Margin, M. Ellery: this posting is a correction, not an expansion.</p>
+  </div>
+  <div class="links"><span class="lbl">READ IT:</span><a href="exhibit-k-posting.html">THE FULL POSTING</a><span class="lbl">APPEARS AT:</span><a href="calendar.html">THE TWELVE-MONTH REVIEW</a></div>
+</div>
+
+<div class="chrome">
+  <span class="tagno">CF-060</span>
+  <span>Designed composite · summaries stand for the full documents ⊕</span>
+  <span class="fill"></span>
+  <nav><a href="index-v3.html">OSTERMILL</a><a href="case-file.html">CASE FILE</a><a href="personas.html">PEOPLE</a><a href="calendar.html">CALENDAR</a><a href="project-plan.html">PLAN</a><a href="prototypes.html">PROTOTYPES</a><span class="cur">EXHIBITS</span><a href="agent.html">AGENT</a><a href="eval-simulator.html">EVAL</a></nav>
+</div>
+
+</body>
+</html>
