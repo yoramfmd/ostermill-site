@@ -358,7 +358,7 @@
   <span class="tagno">CF-021</span>
   <span>Designed composite · dates marked ⊕ are placed for layout</span>
   <span class="fill"></span>
-  <nav><a href="index-v3.html">OSTERMILL</a><a href="case-file.html">CASE FILE</a><a href="personas.html">PEOPLE</a><span class="cur">CALENDAR</span><a href="project-plan.html">PLAN</a><a href="prototypes.html">PROTOTYPES</a><a href="exhibits.html">EXHIBITS</a><a href="agent.html">AGENT</a><a href="eval-simulator.html">EVAL</a></nav>
+  <nav><a href="index.html">OSTERMILL</a><a href="case-file.html">CASE FILE</a><a href="personas.html">PEOPLE</a><span class="cur">CALENDAR</span><a href="project-plan.html">PLAN</a><a href="prototypes.html">PROTOTYPES</a><a href="exhibits.html">EXHIBITS</a><a href="agent.html">AGENT</a><a href="eval-simulator.html">EVAL</a></nav>
 </div>
 
 <script>
@@ -479,7 +479,7 @@ var ATT = {
  m5:[{e:"ARTIFACT",t:"Case selection table: 20 cases, 12 drawn from the 41 holds",h:"prototypes.html"}],
  m6:[{e:"MEMO",t:"Stopping condition, signed 24 March, before any run",h:"prototypes.html"}],
  m7:[{e:"ARTIFACT",t:"The adjudication table: 3 columns × 20 cases, marked in R. Vaughn's hand",h:"prototypes.html"}],
- m8:[{e:"MEMO",t:"Dispositions of A, C, and Agent v1, with reasons stated in the decision text",h:"../transcripts/T2-adjudication-withdrawal.md"},
+ m8:[{e:"MEMO",t:"Dispositions of A, C, and Agent v1, with reasons stated in the decision text",h:"transcripts/T2-adjudication-withdrawal.md"},
      {e:"MARGIN",t:"D. Okafor, on the run table: \"whatever we build inherits this, not the clean rows\""}],
  m9:[{e:"EXHIBIT B",x:1,t:"The go decision: suitability, three priced alternatives, the outcome statement, the no-go lines with named owners",h:"exhibits.html#ex-b"}],
  m10:[{e:"EXHIBIT C",x:1,t:"The Human Brief, as filed",h:"briefs.html#human"},{e:"EXHIBIT D",x:1,t:"The Executable Brief, as filed",h:"briefs.html#executable"}],
@@ -546,7 +546,7 @@ function openM(id){
   var tl=document.getElementById('mtl');
   var TR={T1:'T1-friday-demo.md',T2:'T2-adjudication-withdrawal.md',T3:'T3-go-meeting.md',T4:'T4-hours-debate.md',T5:'T5-readiness-review.md',T6:'T6-postmortem.md'};
   if(d.x){tl.style.display='block';var mx=document.getElementById('mtx');mx.textContent=d.x+' →';
-    var tm=d.x.match(/T[1-6]/); if(tm&&TR[tm[0]]){mx.href='../transcripts/'+TR[tm[0]];}else{mx.removeAttribute('href');}}
+    var tm=d.x.match(/T[1-6]/); if(tm&&TR[tm[0]]){mx.href='transcripts/'+TR[tm[0]];}else{mx.removeAttribute('href');}}
   else{tl.style.display='none';}
   ovl.classList.add('open');
 }
