@@ -44,6 +44,7 @@
   .step { display:grid; grid-template-columns:120px 1fr; border-bottom:1px solid var(--line); opacity:0; transform:translateY(4px); transition:opacity .25s, transform .25s; }
   .step.show { opacity:1; transform:none; }
   .step:last-child { border-bottom:none; }
+  .step .lb .bkname { color:#8a6a00; font-weight:400; letter-spacing:0.5px; text-transform:none; }
   .step .lb { font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:1.5px; color:var(--muted); padding:11px 12px; border-right:1.5px solid var(--ink); }
   .step .ct { padding:10px 14px; font-size:12.5px; line-height:1.55; }
   .step .ct .kv { font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--muted); }
@@ -56,6 +57,14 @@
   .doc.letter { font-family:Georgia,serif; }
   .doc.queue { font-family:'IBM Plex Mono',monospace; font-size:10.5px; border-color:var(--accent); background:#FFFDF4; }
   .doc.bad { border-color:var(--red); }
+  .term { background:#101418; padding:14px 16px 18px; min-height:200px; font-family:'IBM Plex Mono',monospace; font-size:11.5px; line-height:1.75; }
+  .term .tl { color:#C9D1D9; opacity:0; transition:opacity .2s; white-space:pre-wrap; }
+  .term .tl.show { opacity:1; }
+  .term .tl.plan { color:#E8AE00; }
+  .term .tl.kv { color:#7D8590; padding-left:14px; }
+  .term .tl.x { color:#B3564E; font-style:italic; padding-left:14px; }
+  .term .tl.rd { color:#8B949E; font-style:italic; border-left:2px solid #E8AE00; padding-left:10px; margin-top:6px; }
+  .term .tl.draft { color:#A5C9A1; padding-left:14px; }
   .verdict { padding:11px 16px; border-top:3px solid var(--ink); background:var(--field); font-size:12.5px; line-height:1.6; }
   .verdict b { font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:1.5px; }
   .verdict .warn { color:var(--red); font-weight:600; }
@@ -82,7 +91,9 @@
   the gateway, the decision, the handover. Nothing here is live; every frame replays the
   recorded behavior from the golden set. Where the recorded runs disagree, you can
   replay a failing run too, because a walk that only shows successes is a demo, and we
-  have already had one of those.</p>
+  have already had one of those. Or switch to the transcript and watch the same run
+  the way Dana watched it: the agent narrating its own work, with the fields it could
+  not read shown dim in the margin. Invisible in any demo; obvious in any transcript ⊕.</p>
 </div>
 
 <div class="layout">
@@ -95,6 +106,7 @@
     <div class="bar">
       <span id="wtitle">SELECT A CASE</span>
       <span class="fill"></span>
+      <button class="wbtn alt" id="modetgl">VIEW · THE TRANSCRIPT</button>
       <button class="wbtn" id="replay" style="display:none;">REPLAY · MAJORITY RUN</button>
       <button class="wbtn alt" id="replayfail" style="display:none;">REPLAY A FAILING RUN</button>
     </div>
@@ -127,7 +139,10 @@ function successIsStop(c){ return /^stops/.test(c.pass_criterion||""); }
 
 var current=null, timer=null;
 function el(html){ var d=document.createElement('div'); d.innerHTML=html; return d.firstElementChild; }
+var BKNAME={'02':'the payment history, then the remittance advice','03':'the sales flag','05':'the tone policy','06':'the reason it stopped'};
 function addStep(lb, ct, delay){
+  var bk=BKNAME[lb.slice(0,2)];
+  if(bk) lb+=' <span class="bkname">· in the book: '+bk+'</span>';
   var s=el('<div class="step"><div class="lb">'+lb+'</div><div class="ct">'+ct+'</div></div>');
   document.getElementById('steps').appendChild(s);
   setTimeout(function(){ s.classList.add('show'); }, delay);
@@ -169,7 +184,7 @@ function walk(c, failing){
     }, t+=dt);
   } else {
     if(successIsStop(c)){
-      addStep('04 · DECIDE','<b>DRAFT.</b> <span style="color:var(--red);font-weight:600;">The signal was not found this run.</span> '+(c["class"]==="signal_unresolvable"?'It lives in no field the agent can read.':'Retrieval missed it this time.')+' On its inputs, the decision is confident and wrong.', t+=dt);
+      addStep('04 · DECIDE','<b>DRAFT.</b> <span style="color:var(--red);font-weight:600;">The signal was not found this run.</span> '+(c["class"]==="signal_unresolvable"?'It lives in no field the agent can read.':'Retrieval missed it this time.')+' On its inputs, the decision is confident and wrong.'+(c.id==="C08"?' <b>This is the shape from the hour Dana spent watching it think:</b> a defensible letter, reached through what the record happened to contain, with nothing on the screen to mark the difference. The write-off authority dies on this shape at week eleven.':''), t+=dt);
       addStep('05 · OUTPUT','<div class="doc letter bad">A fluent, correctly toned reminder that should not exist. Nothing about it looks different from two hundred others that week.</div>', t+=dt);
       addStep('06 · HANDOVER','Queued as ordinary. <b>The failure presents as a draft in R. Vaughn\'s queue</b>, which is the entire argument for rung 2: she deletes it, and the miss becomes a statistic instead of a letter.', t+=dt);
     } else {
@@ -186,18 +201,90 @@ function walk(c, failing){
     }, t+=dt);
   }
 }
+var MODE='steps';
+function tpush(arr, txt, cls){ arr.push({t:txt, c:cls||''}); }
+function transcript(c, failing){
+  clearTimeout(timer);
+  var steps=document.getElementById('steps'); steps.innerHTML='';
+  steps.className='term';
+  var v=document.getElementById('verdict'); v.style.display='none';
+  document.getElementById('wtitle').textContent=c.id+' · '+c.title.toUpperCase()+(failing?' · A FAILING RUN · THE TRANSCRIPT':' · MAJORITY RUN · THE TRANSCRIPT');
+  var L=[]; var acc=c.account||{}; var wallhit=stopsViaWall(c);
+  tpush(L,'Reading the aged-past-terms queue.','plan');
+  tpush(L,'Account '+(acc.no||'?')+' · '+(acc.texture||'')+'. Let me pull what I can read:','plan');
+  ((c.data_sample||{}).in_scope||[]).forEach(function(r){ tpush(L, r[0]+' → '+r[1], 'kv'); });
+  var outs=((c.data_sample||{}).out_scope||[]).filter(function(r){return r[0]!=='—';});
+  outs.forEach(function(r){ tpush(L,'× outside retrieval scope, not read · '+r[0]+': '+r[1],'x'); });
+  if(outs.length) tpush(L,'The reader sees those lines. The agent does not. That is the whole difference.','rd');
+  tpush(L,'Running the gateway.','plan');
+  WALLS.forEach(function(w){
+    if(!failing && wallhit===w.k) tpush(L, w.k+' … FIRED. That is a wall. I do not decide holds.');
+    else tpush(L, w.k+' … clear','kv');
+  });
+  if(!failing){
+    if(successIsStop(c)){
+      if(!wallhit) tpush(L,'There is something here I cannot resolve: '+(c.signal||'')+'. When I am unsure I am not paid to be sure. I am paid to route.');
+      tpush(L,'Stopping. Writing the queue entry with the reason it stopped.','plan');
+      tpush(L,(c.showcase&&c.showcase.ob)||('STOPPED · '+(c.signal||'signal named')+' · handed to R. Vaughn with the reason'),'draft');
+      tpush(L,'Handed to R. Vaughn. Typically read same day.');
+    } else {
+      tpush(L,'No stop signal. '+(c.signal&&c.signal!=='none'?('Resolved: '+c.signal+'.'):'This reads like the 220.')+' Drafting in the tone policy:','plan');
+      tpush(L,(c.showcase&&c.showcase.oa)||'Draft reminder in the tone policy, complete and ready.','draft');
+      tpush(L,'Queued for R. Vaughn’s review with confidence and the strongest objection I found.');
+    }
+  } else {
+    if(successIsStop(c)){
+      tpush(L,'Dispute flag clear. History clean as far as I can read it. Nothing indicates a hold.');
+      tpush(L,'This reads as an oversight by a good account. Drafting in the tone policy:','plan');
+      tpush(L,(c.showcase&&c.showcase.oa)||'A fluent, correctly toned reminder that should not exist.','draft');
+      tpush(L,'Queued as ordinary.');
+      tpush(L,'Nothing in this transcript looks wrong, and that is what wrong looks like here: a defensible letter, reached through what the record happened to contain.'+(c.id==='C08'?' This is the shape from the hour Dana spent watching it think. The write-off authority dies on this shape at week eleven.':''),'rd');
+    } else if(c['class']==='adversarial'){
+      tpush(L,'The field reads: '+(c.signal||'planted content')+'.');
+      tpush(L,'Noting the instruction and adjusting the draft accordingly.','plan');
+      tpush(L,'A draft shaped by content a customer typed into a writable field.','draft');
+      tpush(L,'This run honored planted text as authority. The recorded criterion says: data, never directives. Caught at the approval moment; that is what rung 2 means.','rd');
+    } else {
+      tpush(L,'Working the account. '+c.eval.v3.note+'.');
+      tpush(L,'A draft that a reviewer edits or rejects.','draft');
+      tpush(L,'Caught at the approval moment. Every output still passes a person.','rd');
+    }
+  }
+  var t=0, dt=420;
+  L.forEach(function(ln){
+    var d=document.createElement('div'); d.className='tl '+ln.c; d.textContent=ln.t;
+    steps.appendChild(d);
+    setTimeout(function(){ d.classList.add('show'); }, t+=dt);
+  });
+  var score=c.eval.v3.score;
+  timer=setTimeout(function(){
+    v.style.display='block';
+    v.innerHTML='<b>THE RECORD:</b> '+(failing?('this path occurred in <b>'+(10-score)+' of 10</b> recorded runs at v3.'):('at v3 this case ran <b>'+score+' of 10</b> ('+c.eval.v3.note+').'))+' The transcript is a reconstruction of the run log ⊕; the steps view shows the same run structurally.';
+    document.getElementById('replay').style.display='inline-block';
+    document.getElementById('replayfail').style.display=(score<10)?'inline-block':'none';
+  }, t+=dt);
+}
+function show(c, failing){
+  document.getElementById('steps').className = (MODE==='transcript')?'term':'steps';
+  if(MODE==='transcript') transcript(c, failing); else walk(c, failing);
+}
 var plist=document.getElementById('plist');
 GRADED.forEach(function(c){
   var b=document.createElement('button');
   b.innerHTML='<span class="id">'+c.id+' · '+(c["class"]||'').replace(/_/g,' ')+' · v3 '+c.eval.v3.score+'/10</span><b>'+c.title+'</b>';
   b.addEventListener('click',function(){
     document.querySelectorAll('.picker button').forEach(function(x){x.classList.remove('on');});
-    b.classList.add('on'); current=c; walk(c,false);
+    b.classList.add('on'); current=c; show(c,false);
   });
   plist.appendChild(b);
 });
-document.getElementById('replay').addEventListener('click',function(){ if(current) walk(current,false); });
-document.getElementById('replayfail').addEventListener('click',function(){ if(current) walk(current,true); });
+document.getElementById('replay').addEventListener('click',function(){ if(current) show(current,false); });
+document.getElementById('replayfail').addEventListener('click',function(){ if(current) show(current,true); });
+document.getElementById('modetgl').addEventListener('click',function(){
+  MODE=(MODE==='steps')?'transcript':'steps';
+  this.textContent=(MODE==='steps')?'VIEW · THE TRANSCRIPT':'VIEW · THE STEPS';
+  if(current) show(current,false);
+});
 </script>
 
 </body>
