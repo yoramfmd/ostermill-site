@@ -17,5 +17,6 @@
 .learning-footer__group a:hover,.learning-footer__group a:focus-visible{color:#fff;border-bottom-color:#71808c;outline:none}
 .learning-footer__group em{font:400 9px/1.5 'IBM Plex Mono',monospace;color:#8f9ca6;text-transform:uppercase;font-style:normal;white-space:nowrap}
 .learning-footer__base{display:flex;justify-content:space-between;gap:28px;border-top:1px solid #40505e;margin-top:30px;padding-top:20px;color:#8f9ca6;font-size:11px;line-height:1.5}
+.learning-footer__book{color:#d7dde2!important;border-bottom:1px solid #71808c;padding-bottom:2px}.learning-footer__book:hover,.learning-footer__book:focus-visible{color:#f2c400!important;border-bottom-color:#f2c400;outline:none}
 @media(max-width:900px){.learning-footer__head{grid-template-columns:1fr;gap:18px}.learning-footer__featured{grid-template-columns:repeat(2,1fr)}.learning-footer__directory{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.learning-footer{padding:42px 20px}.learning-footer__featured,.learning-footer__directory{grid-template-columns:1fr}.learning-footer__card{min-height:118px}.learning-footer__base{display:block}.learning-footer__base span{display:block;margin-top:8px}}
