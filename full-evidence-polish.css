@@ -1,0 +1,45 @@
+/* Visual-only companion treatment for full evidence documents H, I and K. */
+body {
+  background:linear-gradient(180deg,#f7f8f9 0,#eef1f4 330px,#eef1f4 100%);
+  padding:0 24px 112px;
+}
+.filehead { max-width:1180px; margin:0 auto 28px; padding-top:58px; }
+.filehead .tab { background:#172b3a; border-radius:2px; }
+.filehead h1 { font-size:42px; letter-spacing:-1.4px; line-height:1.02; margin-top:18px; }
+.filehead h1::after { width:74px; height:5px; margin-top:14px; }
+.sheet {
+  max-width:1180px;
+  border:1px solid #ccd2d7;
+  border-radius:8px;
+  overflow:hidden;
+  box-shadow:0 10px 32px rgba(23,43,58,.07);
+}
+.formbar { background:#172b3a; padding:13px 20px; }
+.formbar .lt { padding:5px 9px; border-radius:2px; }
+.head { padding:23px 28px 18px; border-bottom:1px solid #d9dee2; }
+.head h2 { font-size:22px; letter-spacing:-.25px; }
+.head .byline { margin-top:9px; }
+section { padding:19px 28px 21px; border-bottom:1px solid #d9dee2; }
+section h3 { color:#314755; margin-bottom:10px; }
+section p,ol { max-width:88ch; font-size:14px; line-height:1.7; }
+.quote { background:#f1f3f5; padding:14px 16px; border-radius:0 4px 4px 0; font-size:14px; }
+table { border:1px solid #d9dee2; }
+th { background:#243a49; padding:8px 10px; }
+td { padding:9px 10px; background:#fff; }
+tr:nth-child(even) td { background:#fafbfc; }
+.marg { font-size:19px; color:#41515c; }
+.chrome { background:#172b3a; box-shadow:0 -1px 0 rgba(255,255,255,.12); }
+
+@media (max-width:760px) {
+  body { padding:0 12px 96px; }
+  .filehead { padding:32px 6px 0; margin-bottom:20px; }
+  .filehead h1 { font-size:31px; letter-spacing:-1px; }
+  .sheet { border-radius:6px; }
+  .formbar { padding:12px 14px; }
+  .head { padding:17px 16px 14px; }
+  .head h2 { font-size:18px; }
+  section { padding:15px 16px 17px; overflow:hidden; }
+  section p,ol { font-size:13px; line-height:1.65; }
+  table { display:block; overflow-x:auto; }
+  .chrome .fill,.chrome nav { display:none; }
+}

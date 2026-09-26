@@ -1,0 +1,155 @@
+/* Visual-only treatment for the locked A-K evidence record. */
+body {
+  background:linear-gradient(180deg,#f7f8f9 0,#eef1f4 360px,#eef1f4 100%);
+  padding:0 24px 112px;
+}
+
+.filehead {
+  max-width:1180px;
+  margin:0 auto 30px;
+  padding:58px 0 24px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(330px,.7fr);
+  column-gap:72px;
+  align-items:end;
+}
+.filehead .tab { grid-column:1; justify-self:start; background:#172b3a; border-radius:2px; }
+.filehead h1 {
+  grid-column:1;
+  font-size:42px;
+  letter-spacing:-1.5px;
+  line-height:1.02;
+  margin-top:18px;
+}
+.filehead h1::after { width:74px; height:5px; margin-top:14px; }
+.filehead p {
+  grid-column:2;
+  grid-row:1 / span 2;
+  align-self:end;
+  font-size:15px;
+  line-height:1.65;
+  margin:0;
+  max-width:54ch;
+}
+
+.ex {
+  --phase:#e8ae00;
+  max-width:1180px;
+  margin:0 auto 22px;
+  display:grid;
+  grid-template-columns:190px minmax(0,1fr);
+  background:#fff;
+  border:1px solid #ccd2d7;
+  border-radius:8px;
+  overflow:hidden;
+  box-shadow:0 10px 32px rgba(23,43,58,.07);
+  scroll-margin-top:20px;
+}
+#ex-c,#ex-d,#ex-e { --phase:#9ccbbb; }
+#ex-f { --phase:#bba6d7; }
+#ex-g,#ex-h { --phase:#d69a89; }
+#ex-i,#ex-j,#ex-k { --phase:#9fb0c3; }
+
+.ex .formbar {
+  grid-column:1;
+  grid-row:1 / span 3;
+  background:#172b3a;
+  border-left:6px solid var(--phase);
+  padding:24px 18px;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:flex-start;
+  gap:12px;
+  font-size:10px;
+  line-height:1.5;
+}
+.ex .formbar .lt {
+  background:var(--phase);
+  color:#111820;
+  border-radius:2px;
+  padding:5px 8px;
+}
+.ex .formbar .fill { display:none; }
+.ex .formbar > span:last-child {
+  margin-top:auto;
+  color:#fff;
+  border:1px solid rgba(255,255,255,.35);
+  padding:4px 7px;
+}
+
+.ex .head {
+  grid-column:2;
+  padding:23px 28px 17px;
+  border-bottom:1px solid #d9dee2;
+  align-items:flex-start;
+}
+.ex .head h2 { font-size:21px; line-height:1.15; letter-spacing:-.25px; }
+.ex .head .filed { max-width:44ch; text-align:right; line-height:1.5; }
+.ex .body { grid-column:2; padding:20px 28px 22px; }
+.ex .body p { max-width:82ch; font-size:14px; line-height:1.7; }
+.ex .log,.ex .quote {
+  max-width:70ch;
+  margin:14px 0 6px;
+  padding:13px 16px;
+  background:#f1f3f5;
+  border-left-color:var(--phase);
+  border-radius:0 4px 4px 0;
+}
+.ex .quote { font-size:14px; line-height:1.55; }
+.ex table { margin-top:12px !important; border:1px solid #d9dee2; border-radius:4px; overflow:hidden; }
+.ex th { background:#243a49; padding:8px 10px; }
+.ex td { padding:9px 10px; background:#fff; }
+.ex tr:nth-child(odd) td { background:#fafbfc; }
+.marg { font-size:19px; line-height:1.35; color:#41515c; }
+
+.ex .links {
+  grid-column:2;
+  padding:14px 28px 18px;
+  border-top:1px solid #d9dee2;
+  background:#fafbfc;
+  gap:8px;
+  align-items:center;
+}
+.ex .links .lbl { margin-right:2px; }
+.ex .links a {
+  border:1px solid #b8c0c6;
+  border-radius:3px;
+  background:#fff;
+  padding:6px 9px;
+  transition:background .15s,border-color .15s,transform .15s;
+}
+.ex .links a:hover,.ex .links a:focus-visible {
+  background:#fff7d6;
+  border-color:#c79b00;
+  transform:translateY(-1px);
+  outline:none;
+}
+
+.chrome { background:#172b3a; box-shadow:0 -1px 0 rgba(255,255,255,.12); }
+
+@media (max-width:760px) {
+  body { padding:0 12px 96px; }
+  .filehead { display:block; padding:32px 6px 12px; margin-bottom:20px; }
+  .filehead h1 { font-size:31px; letter-spacing:-1px; }
+  .filehead p { margin-top:16px; font-size:14px; }
+  .ex { display:block; border-radius:6px; margin-bottom:16px; }
+  .ex .formbar {
+    min-height:0;
+    border-left:0;
+    border-top:5px solid var(--phase);
+    padding:12px 14px;
+    flex-direction:row;
+    align-items:center;
+  }
+  .ex .formbar .fill { display:block; flex:1; }
+  .ex .formbar > span:last-child { margin-top:0; }
+  .ex .head { padding:17px 16px 13px; display:block; }
+  .ex .head h2 { font-size:18px; }
+  .ex .head .filed { display:block; margin-top:7px; text-align:left; }
+  .ex .body { padding:15px 16px 17px; overflow:hidden; }
+  .ex .body p { font-size:13px; line-height:1.65; }
+  .ex table { display:block; overflow-x:auto; white-space:normal; }
+  .ex .links { padding:12px 16px 15px; }
+  .chrome .fill,.chrome nav { display:none; }
+}

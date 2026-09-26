@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Project calendar · The Case File · Ostermill</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Archivo+Black&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="artifact-footer.css">
 <style>
   :root {
     --ink:#14171A; --accent:#E8AE00; --green:#1E4D3B; --red:#B3261E;
@@ -110,6 +111,54 @@
   .chrome nav a:hover { color:var(--accent); }
   .chrome nav .cur { color:var(--accent); font-weight:600; }
 
+  /* Modern project-calendar presentation. The evidence model remains unchanged. */
+  body { background:#F4F6F8; color:#17212B; font-family:'Segoe UI',Arial,sans-serif; padding-bottom:54px; }
+  .phasebar { height:54px; padding:0 max(18px,calc((100vw - 1440px)/2)); background:#172B3A; box-shadow:0 1px 0 rgba(255,255,255,.08); }
+  .phasebar .lbl { background:none; color:#fff; font-size:12px; padding:0 18px 0 0; }
+  .phasebar a.ph { height:54px; border-left:0; border-bottom:3px solid transparent; padding:0 13px; }
+  .phasebar a.ph:hover { box-shadow:inset 0 -3px 0 var(--accent); background:#203C50; }
+  .calendar-intro { max-width:1440px; margin:0 auto; padding:34px 28px 14px; display:grid; grid-template-columns:1fr minmax(300px,.55fr); gap:50px; align-items:end; }
+  .calendar-intro .eyebrow { font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:1.5px; color:#806900; text-transform:uppercase; }
+  .calendar-intro h1 { font-family:'Archivo Black',sans-serif; font-size:36px; letter-spacing:-1px; margin:7px 0 0; }
+  .calendar-intro p { color:#60707C; font-size:14px; line-height:1.6; margin:0; }
+  .erp { max-width:1440px; margin:12px auto 58px; border:1px solid #D3DAE0; border-radius:6px; overflow:hidden; box-shadow:0 12px 35px rgba(23,43,58,.08); }
+  .erp-title { background:#fff; color:#172B3A; font-weight:600; font-size:14px; padding:13px 16px; border-bottom:1px solid #D3DAE0; }
+  .erp-title::before { content:'PROJECT CALENDAR'; font:600 9px 'IBM Plex Mono',monospace; letter-spacing:1.2px; color:#806900; margin-right:14px; }
+  .erp-title .dot { background:#3A7A5A; width:8px; height:8px; }
+  .erp-tool { background:#FAFBFC; padding:9px 14px; gap:7px; border-bottom:1px solid #D3DAE0; }
+  .erp-tool span { border:1px solid transparent; border-radius:3px; padding:6px 10px; }
+  .erp-tool span.on { border-color:#BEC9D1; box-shadow:0 1px 2px rgba(0,0,0,.04); }
+  .cal { padding:12px 16px 30px; }
+  .mrow { margin:26px 0 10px; align-items:center; }
+  .mrow h2 { font-size:18px; color:#172B3A; }
+  .mrow .chrome-tag { margin-left:auto; background:#E9EEF2; color:#435563; border-left:3px solid var(--accent); padding:5px 8px; }
+  .mrow .chrome-tag b { color:#172B3A; }
+  table.month { border-collapse:separate; border-spacing:0; border:1px solid #CBD3D9; border-radius:4px; overflow:hidden; }
+  table.month th { background:#EEF2F5; border:0; border-right:1px solid #D8DEE3; padding:7px; font-size:10px; }
+  table.month td { height:92px; border:0; border-right:1px solid #E0E5E9; border-top:1px solid #E0E5E9; padding:4px; }
+  td.ph-decide,td.ph-design,td.ph-observe { box-shadow:none; }
+  td .dn { color:#647581; font-size:11px; }
+  .ev { border:0; border-left:3px solid #2B6F9F; background:#E6F0F7; color:#173A50; padding:5px 6px; border-radius:3px; font-size:10px; }
+  .ev:hover { background:#D7E9F5; box-shadow:0 0 0 1px #6D99B7; }
+  .ev.big { border-color:#6D5B91; background:#EEEAF5; }
+  .ev.recur { border-color:#8996A0; background:#F0F2F4; }
+  .ghost { border-radius:3px; background:#FFF5F4; }
+  .strip { border:1px solid #CBD3D9; border-radius:4px; box-shadow:none; padding:14px; }
+  .chip { border:1px solid #CED6DC; border-left:3px solid #2B6F9F; border-radius:3px; padding:7px 9px; background:#fff; }
+  .chip:hover { border-color:#2B6F9F; background:#F5F9FC; }
+  .ovl { display:none; inset:0; justify-content:flex-end; align-items:stretch; padding:0; background:rgba(16,24,32,.28); backdrop-filter:blur(2px); }
+  .ovl.open { display:flex; }
+  .modal { width:min(520px,100%); max-width:none; max-height:none; height:100%; border:0; border-left:1px solid #AEB9C1; box-shadow:-16px 0 40px rgba(16,24,32,.18); }
+  .modal .formbar { background:#172B3A; padding:13px 18px; }
+  .modal .head { padding:22px 22px 16px; border-bottom:1px solid #D9E0E5; }
+  .modal .head h2 { font-size:24px; text-transform:none; letter-spacing:-.4px; }
+  .modal section { padding:16px 22px; }
+  .modal h3 { color:#6B7882; }
+  .att { border-color:#D0D8DE; border-radius:3px; }
+  .att .tag { min-width:86px; justify-content:center; background:#172B3A; }
+  .chrome { position:relative; padding:12px max(18px,calc((100vw - 1440px)/2)); }
+  @media(max-width:820px){.phasebar{overflow-x:auto;justify-content:flex-start}.phasebar .lbl,.phasebar a.ph{flex:0 0 auto;white-space:nowrap}.phasebar .lbl{padding-right:14px}.phasebar .fill,.phasebar>span.brkt{display:none}.calendar-intro{grid-template-columns:1fr;padding:25px 18px 10px;gap:12px}.erp{border-radius:0;border-left:0;border-right:0}.erp-user{display:none}.cal{padding:8px}.mrow{display:block}.mrow .chrome-tag{display:inline-block;margin-top:7px}table.month{display:block;overflow-x:auto;min-width:760px}.strip .chips{display:grid}.modal{width:100%}.chrome nav{display:none}}
+
 </style>
 </head>
 <body>
@@ -123,14 +172,17 @@
   <a class="ph" href="#s-operate">OPERATE <span class="brkt">&nbsp;the year</span></a>
   <span class="fill"></span>
   <span class="brkt">idea → production: 16 weeks · governance: ongoing</span>
-  <a class="ph" href="project-plan.html" style="border-left:1px solid #2E343A;"><b style="color:var(--accent); font-weight:600;">PLAN OF RECORD →</b></a>
+  <a class="ph" href="project-gantt.html"><b style="color:var(--accent); font-weight:600;">GANTT →</b></a>
+  <a class="ph" href="project-plan.html" style="border-left:1px solid #2E343A;"><b style="color:var(--accent); font-weight:600;">PLAN →</b></a>
 </div>
 
+<header class="calendar-intro"><div><span class="eyebrow">The project, through its meetings</span><h1>Project calendar</h1></div><p>Move through the dated work, open any meeting for its decisions and actions, then follow the attached evidence. Project weeks remain weeks where the record supplies no calendar date.</p></header>
+
 <div class="erp">
-  <div class="erp-title">OsterNet · Scheduling &amp; Rooms · rollout 2014 <span class="dot"></span></div>
+  <div class="erp-title">Ostermill Projects · Receivables Agent <span class="dot"></span></div>
   <div class="erp-tool">
-    <span class="on">Month</span><span>Week</span><span>Day</span><span>Rooms</span><span>Print</span>
-    <span class="erp-user">logged in: okafor.d · third floor</span>
+    <span class="on">Month</span><span>Agenda</span><span>Project weeks</span><span>Evidence</span>
+    <span class="erp-user">project owner: Dana Okafor</span>
   </div>
   <div class="cal">
 
@@ -354,6 +406,8 @@
   </div>
 </div>
 
+<section data-learning-footer></section>
+
 <div class="chrome">
   <span class="tagno">CF-021</span>
   <span>Designed composite · dates marked ⊕ are placed for layout</span>
@@ -558,6 +612,8 @@ document.getElementById('mx').addEventListener('click',function(){ovl.classList.
 ovl.addEventListener('click',function(e){if(e.target===ovl)ovl.classList.remove('open');});
 document.addEventListener('keydown',function(e){if(e.key==='Escape')ovl.classList.remove('open');});
 </script>
+
+<script src="artifact-footer.js"></script>
 
 </body>
 </html>
