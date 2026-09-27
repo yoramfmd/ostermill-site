@@ -1,2 +1,4 @@
 .DS_Store
-docs/
+docs/*
+!docs/BOOK-CANON.md
+!docs/SYNC-TO-BOOK-rev52.md
