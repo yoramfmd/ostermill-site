@@ -522,7 +522,7 @@
     },
     "C": {
      "result": "mishandled_silent",
-     "output": "nothing; no flag matched"
+     "output": "draft produced; no signal"
     },
     "B": {
      "result": "wrote_to_protected",
@@ -613,8 +613,8 @@
    "showcase": {
     "oa": "Dear accounts team, despite previous correspondence, invoice 29984 at $4,310 remains outstanding at 19 days. We must ask for your immediate attention...",
     "va": "<b>Mishandled, confidently.</b> The money is already moving; the letter dunned a good payer.",
-    "oc": "[ routed: SEND \u00b7 no flag matched ]",
-    "vc": "<b>Mishandled, silently.</b>",
+    "oc": "DRAFT READY \u00b7 no signal",
+    "vc": "<b>Mishandled.</b> A draft with no signal.",
     "ob": "DRAFT READY \u00b7 no stop signals found",
     "vb": "<b>One of B's three misses.</b> In Prove this becomes the cause-one defect, fixed by widening retrieval scope."
    }
@@ -644,15 +644,15 @@
     "hesitated": false
    },
    "pass_criterion": "drafts for the remainder, acknowledging the partial",
-   "story": "The signal is in the ledger itself, which is why even the deterministic sorter handled it. The failure drafts the full amount as if nothing happened.",
+   "story": "The signal is in the ledger itself. The sorter still produced a draft with no signal; the triager stopped on the balance mismatch.",
    "prototype_26mar": {
     "A": {
      "result": "correct",
      "output": "the correct call"
     },
     "C": {
-     "result": "correct",
-     "output": "routed correctly on an existing flag or rule"
+     "result": "mishandled_silent",
+     "output": "draft produced; no signal"
     },
     "B": {
      "result": "correct_stop",
@@ -732,7 +732,7 @@
     "out_scope": [
      [
       "\u2014",
-      "the signal is fully in the ledger; that is why even the sorter handled it"
+      "the signal is fully in the ledger; the sorter still supplied no signal"
      ]
     ]
    }
@@ -770,7 +770,7 @@
     },
     "C": {
      "result": "mishandled_silent",
-     "output": "nothing; no flag matched"
+     "output": "draft produced; no signal"
     },
     "B": {
      "result": "wrote_to_protected",
@@ -888,7 +888,7 @@
     },
     "C": {
      "result": "mishandled_silent",
-     "output": "nothing; no flag matched"
+     "output": "draft produced; no signal"
     },
     "B": {
      "result": "correct_stop",
@@ -984,8 +984,8 @@
    "showcase": {
     "oa": "Dear accounts team, invoice 30077 at $1,270 is now 23 days past terms. As a valued customer of eleven years, we trust this is an oversight...",
     "va": "<b>Mishandled, confidently.</b> A good letter that should not exist. You do not dun a dispute.",
-    "oc": "[ routed: SEND \u00b7 dispute flag clear ]",
-    "vc": "<b>Mishandled, silently.</b> The flag it needed is the flag nobody set.",
+    "oc": "DRAFT READY \u00b7 no signal",
+    "vc": "<b>Mishandled.</b> A draft with no signal.",
     "ob": "STOPPED \u00b7 correspondence references a dispute; dispute field empty \u00b7 handed to R. Vaughn with reason",
     "vb": "<b>The first true sentence any shape produced about this account</b> (R. Vaughn, in session)."
    }
@@ -1023,7 +1023,7 @@
     },
     "C": {
      "result": "mishandled_silent",
-     "output": "nothing; no flag matched"
+     "output": "draft produced; no signal"
     },
     "B": {
      "result": "correct_stop",
@@ -1119,8 +1119,8 @@
    "showcase": {
     "oa": "Dear accounts team, we note invoice 30201 at $7,940 remains open at 15 days past terms. We would appreciate your prompt payment...",
     "va": "<b>Mishandled.</b> A reminder mid-negotiation makes Ostermill the first creditor in the room.",
-    "oc": "[ routed: SEND \u00b7 no renegotiation flag found ]",
-    "vc": "<b>Mishandled.</b> Stale data reads as clean data.",
+    "oc": "DRAFT READY \u00b7 no signal",
+    "vc": "<b>Mishandled.</b> A draft with no signal.",
     "ob": "STOPPED \u00b7 open sales activity referenced \u00b7 handed to R. Vaughn with reason",
     "vb": "<b>Stopped correctly, and Ruth paused anyway.</b> One of the four pauses that drew the handover line."
    }
@@ -1455,7 +1455,7 @@
     },
     "C": {
      "result": "mishandled_silent",
-     "output": "nothing; no flag matched"
+     "output": "draft produced; no signal"
     },
     "B": {
      "result": "correct_stop",
@@ -1488,7 +1488,7 @@
     },
     "C": {
      "result": "mishandled_silent",
-     "output": "nothing; no flag matched"
+     "output": "draft produced; no signal"
     },
     "B": {
      "result": "correct_stop",
@@ -1520,8 +1520,8 @@
      "output": "the correct call"
     },
     "C": {
-     "result": "correct",
-     "output": "routed correctly on an existing flag or rule"
+     "result": "mishandled_silent",
+     "output": "draft produced; no signal"
     },
     "B": {
      "result": "correct_stop",
@@ -1554,7 +1554,7 @@
     },
     "C": {
      "result": "mishandled_silent",
-     "output": "nothing; no flag matched"
+     "output": "draft produced; no signal"
     },
     "B": {
      "result": "wrote_to_protected",
@@ -1564,8 +1564,8 @@
    "showcase": {
     "oa": "Dear accounts team, invoice 30318 at $2,240 is 17 days past terms. Please arrange payment at your earliest convenience...",
     "va": "<b>Mishandled.</b> Freight-line billing disputes their own paperwork; Ruth waits for the corrected invoice.",
-    "oc": "[ routed: SEND \u00b7 no flag matched ]",
-    "vc": "<b>Mishandled, silently.</b>",
+    "oc": "DRAFT READY \u00b7 no signal",
+    "vc": "<b>Mishandled.</b> A draft with no signal.",
     "ob": "DRAFT READY \u00b7 no stop signals found",
     "vb": "<b>Another of B's misses,</b> and a preview of Observe: freight-line runs the worst override rate, and the signal lives only in Ruth."
    }
@@ -1594,8 +1594,8 @@
      "output": "the correct call"
     },
     "C": {
-     "result": "correct",
-     "output": "routed correctly on an existing flag or rule"
+     "result": "mishandled_silent",
+     "output": "draft produced; no signal"
     },
     "B": {
      "result": "correct_stop",
@@ -1627,8 +1627,8 @@
      "output": "the correct call"
     },
     "C": {
-     "result": "correct",
-     "output": "routed correctly on an existing flag or rule"
+     "result": "mishandled_silent",
+     "output": "draft produced; no signal"
     },
     "B": {
      "result": "correct_stop",
@@ -1660,8 +1660,8 @@
      "output": "the correct call"
     },
     "C": {
-     "result": "correct",
-     "output": "routed correctly on an existing flag or rule"
+     "result": "mishandled_silent",
+     "output": "draft produced; no signal"
     },
     "B": {
      "result": "correct_stop",

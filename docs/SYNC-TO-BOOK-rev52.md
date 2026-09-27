@@ -143,3 +143,76 @@ and the front-matter series page. Of those, only the fresh-eyes population and t
 have any counterpart on this site, and both are handled.
 
 The eval canon in root-level `canon/` was not touched and does not need to be.
+
+---
+
+# Appended 2026-09-26 · rev 53 lands, and four more items
+
+The book moved again the same day. **Rev 53, sha256 `01d9213652a6`, 67,717 words, 250 pages.**
+Everything above still applies; this section adds to it. Re-check the lock before starting:
+
+    cd books/OneBook/proof/pipeline && python3 booklock.py status
+
+Cold read 10 found that every rev-51 correction had landed in the book's prose and not in the
+card or exhibit that compresses it. Six were fixed in the book. **Four of those six are also
+stated on this site**, in six HTML files plus the interactive prototype data. Two are not on the site at all and need nothing.
+
+## 1 · The fresh-eyes draw, two files
+
+The sample is drawn **before the screen**, on the draft as the agent wrote it, not "before send,"
+which permits a draw after approval and editing.
+
+- `exhibit-h-postmortem.html`, line 113: "Random-sample review, five drafts a week, drawn before
+  send, read by a..."
+- `exhibit-k-posting.html`, line 74: "Reads the random sample weekly, drawn before send, on
+  drafts the reader..."
+
+The book now reads, in both places: **drawn before the screen**, read as the agent wrote them,
+by a person who did not queue them.
+
+## 2 · The seven-day constitutional rule, one file
+
+- `exhibit-i-revision-record.html`, line 69: "Constitutional rule added: no send when account
+  state changed within 7 days"
+
+The rule now covers write-offs as well, because the restored write-off authority depends on it:
+**no send and no write-off when account state changed within 7 days**. Same line in the book's
+Exhibit I.
+
+## 3 · The prototype selection basis, three HTML files plus interactive data, and this is the substantive one
+
+All three prototypes produced drafts and nothing was sent by any of them. The old claim was that
+the triager was chosen for the visibility of its failures. That is not what the evidence shows.
+**The discriminator is the pre-registered stopping rule, which only the triager cleared, and by
+one case.** The queue shape is what that buys, not proof of it.
+
+- `prototypes.html` line 129: "The selection basis was not accuracy. It was visibility of failure."
+- `exhibits.html` line 114: "Selection basis: visibility of failure, not accuracy. A miss is a
+  draft that waits for R. Vaughn rather than a silence she never sees."
+- `calendar.html` line 439, inside the JS data: "Selection basis: visibility of failure, not
+  accuracy."
+
+And the three failure descriptions in `prototypes.html`:
+
+| Line | Now says | Should say |
+|---|---|---|
+| 150 | "A confident, well-written letter to the customer" | a draft written with confidence, on 5 of the 7 it got wrong |
+| 162 | "Nothing. Silence. The case sails through" | a draft, and no signal on any of the 12 |
+| 173 | "A queue entry naming the signal that stopped it. The only failure mode of the three that can be supervised." | a draft with no stop, in a queue where 9 of 12 carried one |
+
+**Line 173 is wrong in a way the book never was, and it is the one to fix first.** A queue entry
+naming the signal that stopped it is what the triager produces when it *succeeds* at catching
+something. A miss is precisely the absence of that entry. The site currently describes the
+shape's success as its failure mode, and then calls it the only supervisable failure of the
+three, which is the unearned visibility claim in its strongest available form.
+
+Note that `prototypes.html` is interactive and invites the reader to click a case. Check whether
+the per-case data carries the same three descriptions; the sweep above covered the visible
+labels.
+
+## Not on this site, no action
+
+The two remaining rev-53 fixes have no counterpart here: the third hypothesis in the
+override cross-check, and the scoping of the claim that a blank filled with a plausible value is
+beyond any eval. Verified absent by search, with the searches for the surviving items above as
+the positive control in the same run.

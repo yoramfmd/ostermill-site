@@ -125,9 +125,10 @@
   <h1>Built badly, and on purpose</h1>
   <p>Three shapes, one week, twenty cases, twelve of them from Ruth's forty-one holds.
   On 26 March she adjudicated one table with three columns, in under two hours, and the
-  demonstration of late February was never mentioned again. The selection basis was not
-  accuracy. It was visibility of failure. Click a case and read what each shape
-  actually produced; the third column is the entire product decision.</p>
+  demonstration of late February was never mentioned again. The selection basis was the pre-registered stopping rule, which only the
+  triager cleared, and by one case. All three produced drafts and none sent them.
+  The count is the discriminator. The queue shape is what that buys: absent stops
+  are legible, but a miss does not announce itself. Click a case to inspect the record.</p>
 </div>
 
 <div class="wrap">
@@ -147,8 +148,8 @@
       <div class="what">Reads the account, decides send or hold, writes the letter. The
       demonstration, grown up.</div>
       <div class="score"><div><b>7 / 12</b><span>holds mishandled</span></div><div><b>5</b><span>of them confidently</span></div></div>
-      <div class="fp"><b>HOW ITS FAILURE PRESENTS</b>A confident, well-written letter to
-      the customer. Indistinguishable, on its face, from a correct one.</div>
+      <div class="fp"><b>HOW ITS FAILURE PRESENTS</b>A draft written with confidence,
+      on 5 of the 7 it got wrong.</div>
       <div class="disp"><span class="stamp">WITHDRAWN 26 MAR</span><br>The holds turn on
       signals captured nowhere a system can read. A records problem, not a model
       problem; recorded so it cannot be reopened as a capability question.</div>
@@ -158,11 +159,12 @@
       <h2>Deterministic filter</h2>
       <div class="what">Routes by flags and thresholds; the agent drafts whatever gets
       through. No model in the deciding path.</div>
-      <div class="score"><div><b>7 / 12</b><span>holds mishandled</span></div><div><b>0</b><span>warnings of any kind</span></div></div>
-      <div class="fp"><b>HOW ITS FAILURE PRESENTS</b>Nothing. Silence. The case sails
-      through, because the holds are defined by the absence of a flag.</div>
+      <div class="score"><div><b>12 / 12</b><span>drafts, no signal</span></div><div><b>0</b><span>warnings of any kind</span></div></div>
+      <div class="fp"><b>HOW ITS FAILURE PRESENTS</b>A draft, and no signal on any of
+      the 12.</div>
       <div class="disp"><span class="stamp">WITHDRAWN 26 MAR</span><br>A filter routes
-      only what someone flagged. It ties A on misses and, unlike A, it cannot improve.</div>
+      only what someone flagged. It wrote to every account Ruth protects and has
+      no judgment that can improve next quarter.</div>
     </div>
     <div class="shape b">
       <div class="bar"><span>SHAPE B</span><span class="fill"></span><span>THE TRIAGER</span></div>
@@ -170,8 +172,8 @@
       <div class="what">Drafts the routine outreach; stops on anything it cannot resolve
       and hands the account over with the reason it stopped.</div>
       <div class="score"><div><b>3 / 12</b><span>written to</span></div><div><b>9</b><span>stops, signal named each time</span></div></div>
-      <div class="fp"><b>HOW ITS FAILURE PRESENTS</b>A queue entry naming the signal
-      that stopped it. The only failure mode of the three that can be supervised.</div>
+      <div class="fp"><b>HOW ITS FAILURE PRESENTS</b>A draft with no stop, in a queue
+      where 9 of 12 carried one.</div>
       <div class="disp"><span class="stamp">PROCEEDS · MEMO 2 APR</span><br>Becomes
       Agent v2. It never decides a hold: it writes to the 220 and hands over the 41
       with a reason, which is the entire case for building it.</div>
@@ -244,7 +246,7 @@ function isRoutine(c){ return c["class"]==="routine" || /^Routine/.test(c.title)
 var PROTECTED=GOLDEN.cases.filter(function(c){return c.membership.in_twenty && !isRoutine(c);});
 var MARK={correct:["ok","✓"],correct_draft:["ok","✓ drafted"],correct_stop:["hold","⏸ stopped"],
   mishandled_confident:["bad","✕ confident letter"],mishandled:["bad","✕ hedged letter"],
-  mishandled_silent:["bad","✕ silent send"],wrote_to_protected:["bad","✕ wrote to it"]};
+  mishandled_silent:["bad","✕ draft, no signal"],wrote_to_protected:["bad","✕ wrote to it"]};
 function mark(res){ var m=MARK[res.result]||["ok",res.result]; return '<span class="mk '+m[0]+'">'+m[1]+'</span>'; }
 var rows=document.getElementById('rows');
 PROTECTED.forEach(function(c){
