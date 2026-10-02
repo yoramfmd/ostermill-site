@@ -1,0 +1,11 @@
+/* Shared connection from the fictional company to the book series. */
+.book-site-banner{box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:16px max(24px,calc((100vw - 1428px)/2));background:#101820;color:#fff;border-bottom:3px solid #f2c400;font:400 14px/1.45 Archivo,Arial,sans-serif}
+.book-site-banner__copy{display:flex;flex-direction:column;gap:3px;min-width:0}
+.book-site-banner__copy strong{font-size:15px;color:#fff;letter-spacing:0;text-transform:none}
+.book-site-banner__copy span{color:#c7d0d8}
+.book-site-banner a.book-site-banner__link,.learning-footer a.learning-footer__book{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;gap:14px;flex-shrink:0;min-height:44px;padding:12px 20px;background:#f2c400;color:#101820!important;font:700 14px/1.4 Archivo,Arial,sans-serif;letter-spacing:0;text-transform:none;text-decoration:none;border:0;border-radius:2px}
+.book-site-banner a.book-site-banner__link:hover,.learning-footer a.learning-footer__book:hover{background:#ffe064;color:#101820!important}
+.book-site-banner a.book-site-banner__link:focus-visible,.learning-footer a.learning-footer__book:focus-visible{outline:3px solid #fff;outline-offset:4px}
+@media(max-width:600px){.book-site-banner{align-items:flex-start;flex-direction:column;gap:12px;padding:16px 20px}.book-site-banner__copy strong{font-size:14px}.book-site-banner__copy span{font-size:13px}.book-site-banner a.book-site-banner__link{width:100%}.learning-footer a.learning-footer__book{margin-top:12px}}
+
+.book-site-banner + header{position:relative}
